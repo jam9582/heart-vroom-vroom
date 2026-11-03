@@ -28,7 +28,7 @@
     };
   }
 
-  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true, musicVolume: 0.5, sfxVolume: 0.8 }, story.settings);
+  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true, musicVolume: 0.5, sfxVolume: 0.8, voiceVolume: 1 }, story.settings);
   const targetIds = () => Object.keys(story.characters).filter((id) => story.characters[id].target);
   // 공략 대상을 골랐으면 그 캐릭터만 호감도를 관리
   const activeTargets = () => state?.route ? [state.route.character] : targetIds();
@@ -98,6 +98,7 @@
     if (line.lamp) { Object.assign(state.lamps, line.lamp); stageChanged = true; }
     if (line.bgm !== undefined) playBgm(line.bgm);
     if (line.sfx) playSfx(line.sfx);
+    if (line.voice) playVoice(line.voice);
     if (line.card) getCard(line.card);
     if (line.affection) applyAffection(line.affection);
     if (line.vars) addVars(line.vars);
@@ -334,6 +335,7 @@
     open('title-screen', false);
     open('select', false);
     clearTimeout(autoTimer);
+    stopVoice();
     state = newState();
     state.route = route;
     syncAutoButton();
@@ -344,6 +346,7 @@
   }
 
   function toTitle() {
+    stopVoice();
     playBgm(story.meta?.titleMusic);
     clearTimeout(autoTimer);
     if (typing) clearInterval(typing.timer);
@@ -616,7 +619,7 @@
   // ---------- 소리 ----------
   // 브라우저는 사용자가 한 번 누르기 전엔 소리를 막기 때문에, 막히면 첫 클릭 때 다시 재생
   const SOUND_KEY = 'heartvroom.muted';
-  const sound = { bgm: null, name: null, muted: false };
+  const sound = { bgm: null, name: null, voice: null, muted: false };
   try { sound.muted = localStorage.getItem(SOUND_KEY) === '1'; } catch { /* 무시 */ }
 
   const audioSrc = (path) => encodeURI(path);   // 파일명에 띄어쓰기·한글이 있어도 되게
@@ -654,7 +657,7 @@
   // 재생이 늦게 시작돼도, 그 사이 다른 곡으로 바뀌었으면 겹치지 않게 바로 멈춤
   function startBgm(a) {
     a.play().then(() => {
-      if (sound.bgm === a) fadeTo(a, settings().musicVolume);
+      if (sound.bgm === a) fadeTo(a, settings().musicVolume * (sound.voice ? 0.35 : 1));   // 음성 중이면 작게
       else a.pause();
     }).catch(() => {});
   }
@@ -671,9 +674,36 @@
   }
   function fadeOut(a) { fadeTo(a, 0, 600, () => { a.pause(); a.removeAttribute('src'); a.load(); }); }
 
+  // 대사 음성: 클릭해서 넘겨도 끝까지 재생, 다음 음성이 나오면 멈춤. 재생 중엔 배경음악을 살짝 줄임
+  function playVoice(path) {
+    stopVoice();
+    if (sound.muted || !path) return;
+    try {
+      const v = new Audio(audioSrc(path));
+      v.volume = settings().voiceVolume;
+      sound.voice = v;
+      const restore = () => {
+        if (sound.voice !== v) return;
+        sound.voice = null;
+        if (sound.bgm) fadeTo(sound.bgm, settings().musicVolume, 500);
+      };
+      v.addEventListener('ended', restore);
+      v.addEventListener('error', restore);
+      v.play().then(() => { if (sound.bgm) fadeTo(sound.bgm, settings().musicVolume * 0.35, 300); }).catch(restore);
+    } catch { /* 소리 실패는 무시 */ }
+  }
+  function stopVoice() {
+    const v = sound.voice;
+    if (!v) return;
+    sound.voice = null;
+    v.pause();
+    if (sound.bgm) fadeTo(sound.bgm, settings().musicVolume, 500);
+  }
+
   function toggleMute() {
     sound.muted = !sound.muted;
     if (sound.bgm) { sound.bgm.muted = sound.muted; if (!sound.muted) resumeBgm(); }
+    if (sound.muted) stopVoice();
     try { localStorage.setItem(SOUND_KEY, sound.muted ? '1' : '0'); } catch { /* 무시 */ }
     syncSoundButton();
   }
