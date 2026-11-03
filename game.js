@@ -28,7 +28,7 @@
     };
   }
 
-  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true }, story.settings);
+  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true, musicVolume: 0.5, sfxVolume: 0.8 }, story.settings);
   const targetIds = () => Object.keys(story.characters).filter((id) => story.characters[id].target);
   const maxAffection = () => story.affection?.max ?? 5;
 
@@ -82,6 +82,7 @@
     if (line.exit) { state.onStage = state.onStage.filter((id) => id !== line.exit); stageChanged = true; }
     if (line.enter && !state.onStage.includes(line.enter)) { state.onStage.push(line.enter); stageChanged = true; }
     if (line.lamp) { Object.assign(state.lamps, line.lamp); stageChanged = true; }
+    if (line.bgm !== undefined) playBgm(line.bgm);
     if (line.sfx) playSfx(line.sfx);
     if (line.card) getCard(line.card);
     if (line.affection) applyAffection(line.affection);
@@ -190,6 +191,7 @@
 
   function pickOption(opt) {
     if (!state.waiting) return;
+    playSound(story.uiSounds?.choice);
     open('choices', false);
     state.waiting = false;
     state.log.push({ choice: true, text: opt.text });
@@ -247,10 +249,9 @@
 
   function playSfx(name) {
     const src = story.sounds?.[name];
-    if (src) {
-      try { new Audio(src).play().catch(() => {}); } catch { /* 소리 실패는 무시 */ }
-    }
-    if (!settings().showSfxText) return;
+    if (src) playSound(src);
+    // 음원이 없거나 소리를 꺼 둔 경우에만 글자로 표시
+    if (!settings().showSfxText || (src && !sound.muted)) return;
     const el = document.createElement('div');
     el.className = 'sfx';
     el.textContent = name;
@@ -314,6 +315,7 @@
   }
 
   function toTitle() {
+    playBgm(story.meta?.titleMusic);
     clearTimeout(autoTimer);
     if (typing) clearInterval(typing.timer);
     typing = null;
@@ -537,6 +539,77 @@
     });
     open('ending', false);
     open('select', true);
+    playBgm(story.meta?.titleMusic);
+  }
+
+  // ---------- 소리 ----------
+  // 브라우저는 사용자가 한 번 누르기 전엔 소리를 막기 때문에, 막히면 첫 클릭 때 다시 재생
+  const SOUND_KEY = 'heartvroom.muted';
+  const sound = { bgm: null, name: null, muted: false };
+  try { sound.muted = localStorage.getItem(SOUND_KEY) === '1'; } catch { /* 무시 */ }
+
+  const audioSrc = (path) => encodeURI(path);   // 파일명에 띄어쓰기·한글이 있어도 되게
+
+  function playSound(path) {
+    if (sound.muted || !path) return;
+    try {
+      const a = new Audio(audioSrc(path));
+      a.volume = settings().sfxVolume;
+      a.play().catch(() => {});
+    } catch { /* 소리 실패는 무시 */ }
+  }
+
+  function playBgm(name) {
+    name = name || null;
+    if (name === sound.name) return;   // 같은 곡이면 끊지 않고 이어서
+    sound.name = name;
+    if (sound.bgm) fadeOut(sound.bgm);
+    sound.bgm = null;
+    const path = name && story.music?.[name];
+    if (!path) return;
+    const a = new Audio(audioSrc(path));
+    a.loop = true;
+    a.volume = 0;
+    a.muted = sound.muted;
+    sound.bgm = a;
+    startBgm(a);
+  }
+
+  function resumeBgm() {
+    const a = sound.bgm;
+    if (a && a.paused) startBgm(a);
+  }
+
+  // 재생이 늦게 시작돼도, 그 사이 다른 곡으로 바뀌었으면 겹치지 않게 바로 멈춤
+  function startBgm(a) {
+    a.play().then(() => {
+      if (sound.bgm === a) fadeTo(a, settings().musicVolume);
+      else a.pause();
+    }).catch(() => {});
+  }
+
+  function fadeTo(a, target, ms = 800, then) {
+    clearInterval(a._fade);
+    const from = a.volume;
+    const start = performance.now();
+    a._fade = setInterval(() => {
+      const t = Math.min(1, (performance.now() - start) / ms);
+      a.volume = Math.max(0, Math.min(1, from + (target - from) * t));
+      if (t >= 1) { clearInterval(a._fade); then?.(); }
+    }, 40);
+  }
+  function fadeOut(a) { fadeTo(a, 0, 600, () => { a.pause(); a.removeAttribute('src'); a.load(); }); }
+
+  function toggleMute() {
+    sound.muted = !sound.muted;
+    if (sound.bgm) { sound.bgm.muted = sound.muted; if (!sound.muted) resumeBgm(); }
+    try { localStorage.setItem(SOUND_KEY, sound.muted ? '1' : '0'); } catch { /* 무시 */ }
+    syncSoundButton();
+  }
+  function syncSoundButton() {
+    const b = $('sound-toggle');
+    b.textContent = sound.muted ? '🔇' : '🔊';
+    b.setAttribute('aria-label', sound.muted ? '소리 켜기' : '소리 끄기');
   }
 
   // ---------- 보조 ----------
@@ -592,6 +665,7 @@
         if (!chars[c]) warn(`${where}: 램프 캐릭터 "${c}"가 없습니다.`);
         if (!story.lamps?.[color]) warn(`${where}: 램프 색 "${color}"가 lamps에 없습니다.`);
       }
+      if (l.bgm && !story.music?.[l.bgm]) warn(`${where}: 배경음악 "${l.bgm}"이 music에 없습니다.`);
       if (l.card && !story.cards?.[l.card]) warn(`${where}: 카드 "${l.card}"가 cards에 없습니다.`);
       if (l.ending && !story.endings?.[l.ending]) warn(`${where}: 엔딩 "${l.ending}"이 endings에 없습니다.`);
     };
@@ -621,7 +695,7 @@
       if (btn) {
         const a = btn.dataset.action;
         if (a === 'start') openSelect();
-        else if (a === 'go') { if (picked) startGame(null, picked); }
+        else if (a === 'go') { if (picked) { playSound(story.uiSounds?.choice); startGame(null, picked); } }
         else if (a === 'back') open('select', false);
         else if (a === 'album') { renderAlbum(); open('album', true); }
         else if (a === 'log') { renderLog(); open('log', true); }
@@ -670,6 +744,10 @@
     renderTitle();
     bindInput();
     preloadBackgrounds();
+    syncSoundButton();
+    $('sound-toggle').addEventListener('click', (e) => { e.stopPropagation(); toggleMute(); });
+    ['pointerdown', 'keydown'].forEach((t) => document.addEventListener(t, resumeBgm));
+    playBgm(story.meta?.titleMusic);
     // 테스트용: 주소 끝에 #scene=p2 를 붙이면 그 장면부터 바로 시작
     const jump = decodeURIComponent(location.hash).match(/scene=([^&]+)/);
     if (jump) startGame(jump[1]);

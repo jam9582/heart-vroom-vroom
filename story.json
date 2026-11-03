@@ -6,7 +6,8 @@
     "필터": "{ \"filter\": [\"밤\", \"세피아\"] }  해제는 { \"filter\": [] }, 벼락 번쩍임은 { \"flash\": true }",
     "등장/퇴장": "{ \"enter\": \"avante\" }  { \"exit\": \"avante\" }",
     "램프": "{ \"lamp\": { \"avante\": \"분홍\" } }  색 이름은 아래 lamps에 있는 것",
-    "효과음": "{ \"sfx\": \"벼락\" }  sounds에 파일 경로를 적으면 소리도 납니다",
+    "효과음": "{ \"sfx\": \"벼락\" }  sounds에 파일 경로를 적으면 소리가 나고, 경로가 비어 있으면 화면에 글자로 표시됩니다",
+    "배경음악": "{ \"bgm\": \"제네시스 테마\" }  곡 이름은 아래 music에 있는 것. 끄려면 { \"bgm\": \"\" }. 같은 곡이면 끊기지 않고 이어집니다",
     "카드": "{ \"card\": \"c01\" }  카드 목록은 아래 cards",
     "엔딩 기록": "{ \"ending\": \"genesis_happy\" }  엔딩 목록은 아래 endings. 장면에 \"showEnding\": true 가 있으면 끝에 엔딩 화면",
     "선택지": "choice.options 하나에 text, affection(호감도), vars(숨은 점수), lines(고른 뒤 반응 대사), next, require(보이는 조건)",
@@ -17,12 +18,15 @@
   "meta": {
     "title": "심장이 부릉부릉",
     "logo": "assets/ui/logo.png",
+    "titleMusic": "Sweet Anticipation",
     "start": "prologue"
   },
   "settings": {
     "textSpeed": 28,
     "autoDelay": 1400,
-    "showSfxText": true
+    "showSfxText": true,
+    "musicVolume": 0.5,
+    "sfxVolume": 0.8
   },
   "affection": {
     "initial": 0,
@@ -72,6 +76,16 @@
     "노랑": {"color": "#ffd23f"},
     "회색": {"color": "#8d8d8d", "fade": true}
   },
+  "music": {
+    "Sweet Anticipation": "assets/sounds/Sweet Anticipation.mp3",
+    "평범한 하루": "assets/sounds/평범한 하루.mp3",
+    "포니 테마": "assets/sounds/포니 테마.mp3",
+    "제네시스 테마": "assets/sounds/제네시스 테마.mp3",
+    "팰리세이드 테마": "assets/sounds/팰리셰이드 테마.mp3"
+  },
+  "uiSounds": {
+    "choice": "assets/sounds/선택지선택음_2초.mp3"
+  },
   "sounds": {
     "벼락": "",
     "사내 방송 차임": "",
@@ -93,7 +107,7 @@
     "물 첨벙": "",
     "쾅 철컥": "",
     "찰칵": "",
-    "질주": "",
+    "질주": "assets/sounds/바람소리_3초.mp3",
     "천둥 멀어짐": ""
   },
   "cards": {
@@ -125,6 +139,7 @@
   "scenes": {
     "prologue": {
       "lines": [
+        {"bgm": "포니 테마"},
         {"bg": "01_1975_factory"},
         {"filter": ["밤", "세피아"]},
         {"text": "1975년 12월, 울산."},
@@ -142,6 +157,7 @@
     },
     "ch1": {
       "lines": [
+        {"bgm": "평범한 하루"},
         {"bg": "07_auditorium"},
         {"sfx": "사내 방송 차임"},
         {"speaker": "broadcast", "text": "2026년 신입사원 여러분은 대강당으로 모여 주십시오."},
@@ -248,6 +264,7 @@
     },
     "g1": {
       "lines": [
+        {"bgm": "제네시스 테마"},
         {"bg": "10_night_office"},
         {"filter": ["밤"]},
         {"text": "행사까지 30일. 포니는 매일 밤 제네시스 팀에 남았다."},
@@ -423,6 +440,7 @@
     },
     "p1": {
       "lines": [
+        {"bgm": "팰리세이드 테마"},
         {"bg": "06_fuel_bar"},
         {"filter": ["밤"]},
         {"text": "팰리세이드 팀의 행사 준비 첫날 밤. 회식이었다."},
@@ -752,6 +770,7 @@
     },
     "bad": {
       "lines": [
+        {"bgm": "포니 테마"},
         {"ending": "bad"},
         {"bg": "04_event_stage"},
         {"filter": ["밤"]},
