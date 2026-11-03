@@ -5,6 +5,7 @@
     "배경": "{ \"bg\": \"04_event_stage\" }  배경이 바뀌면 필터와 등장인물은 초기화됩니다",
     "필터": "{ \"filter\": [\"밤\", \"세피아\"] }  해제는 { \"filter\": [] }, 벼락 번쩍임은 { \"flash\": true }",
     "등장/퇴장": "{ \"enter\": \"avante\" }  { \"exit\": \"avante\" }",
+    "의상/표정": "{ \"enter\": \"avante\", \"outfit\": { \"avante\": \"suit\" } } 로 옷을 정하고, 대사에 \"expression\": \"sad\" 를 붙이면 suit_sad 그림이 나옵니다. 말하지 않는 캐릭터는 \"expression\": { \"avante\": \"sad\" }. 표정은 바꾸기 전까지 유지",
     "램프": "{ \"lamp\": { \"avante\": \"분홍\" } }  색 이름은 아래 lamps에 있는 것",
     "효과음": "{ \"sfx\": \"벼락\" }  sounds에 파일 경로를 적으면 소리가 나고, 경로가 비어 있으면 화면에 글자로 표시됩니다",
     "배경음악": "{ \"bgm\": \"제네시스 테마\" }  곡 이름은 아래 music에 있는 것. 끄려면 { \"bgm\": \"\" }. 같은 곡이면 끊기지 않고 이어집니다",
@@ -18,7 +19,12 @@
   "meta": {
     "title": "심장이 부릉부릉",
     "logo": "assets/ui/logo.png",
+    "titleBackground": "assets/ui/start_page.png",
     "titleMusic": "Sweet Anticipation",
+    "credits": {
+      "team": "서울 제조 지능화 2반 3조",
+      "members": "권재은, 김진수, 송유빈, 오준상, 조영현"
+    },
     "start": "prologue"
   },
   "settings": {
@@ -35,10 +41,10 @@
   },
   "characters": {
     "pony": {"name": "포니", "color": "#d9483b", "images": {"default": "assets/characters/pony/pony.png"}},
-    "avante": {"name": "아반떼", "title": "동기", "color": "#f2994a", "target": true, "images": {"default": "assets/characters/avante/avante.png"}},
+    "avante": {"name": "아반떼", "title": "동기", "color": "#f2994a", "target": true, "outfit": "suit", "images": {"default": "assets/characters/avante/suit_neutral.png", "casual_neutral": "assets/characters/avante/casual_neutral.png", "casual_happy": "assets/characters/avante/casual_happy.png", "casual_shy": "assets/characters/avante/casual_shy.png", "casual_sad": "assets/characters/avante/casual_sad.png", "casual_jealous": "assets/characters/avante/casual_jealous.png", "casual_handshake": "assets/characters/avante/casual_handshake.png", "casual_holdhand": "assets/characters/avante/casual_holdhand.png", "casual_drink": "assets/characters/avante/casual_drink.png", "casual_eat": "assets/characters/avante/casual_eat.png", "casual_confess": "assets/characters/avante/casual_confess.png", "casual_marry": "assets/characters/avante/casual_marry.png", "mechanic_neutral": "assets/characters/avante/mechanic_neutral.png", "mechanic_happy": "assets/characters/avante/mechanic_happy.png", "mechanic_shy": "assets/characters/avante/mechanic_shy.png", "mechanic_sad": "assets/characters/avante/mechanic_sad.png", "mechanic_jealous": "assets/characters/avante/mechanic_jealous.png", "mechanic_handshake": "assets/characters/avante/mechanic_handshake.png", "mechanic_holdhand": "assets/characters/avante/mechanic_holdhand.png", "mechanic_drink": "assets/characters/avante/mechanic_drink.png", "mechanic_eat": "assets/characters/avante/mechanic_eat.png", "mechanic_confess": "assets/characters/avante/mechanic_confess.png", "mechanic_marry": "assets/characters/avante/mechanic_marry.png", "suit_neutral": "assets/characters/avante/suit_neutral.png", "suit_happy": "assets/characters/avante/suit_happy.png", "suit_shy": "assets/characters/avante/suit_shy.png", "suit_sad": "assets/characters/avante/suit_sad.png", "suit_jealous": "assets/characters/avante/suit_jealous.png", "suit_handshake": "assets/characters/avante/suit_handshake.png", "suit_holdhand": "assets/characters/avante/suit_holdhand.png", "suit_drink": "assets/characters/avante/suit_drink.png", "suit_eat": "assets/characters/avante/suit_eat.png", "suit_confess": "assets/characters/avante/suit_confess.png", "suit_marry": "assets/characters/avante/suit_marry.png"}},
     "genesis": {"name": "제네시스", "title": "행사 총괄 팀장", "color": "#9aa0b8", "target": true, "images": {"default": "assets/characters/genesis/genesis.png"}},
     "palisade": {"name": "팰리세이드", "title": "옆 팀장", "color": "#4caf7a", "target": true, "images": {"default": "assets/characters/palisade/palisade.png"}},
-    "ioniq5": {"name": "아이오닉 5", "title": "사수", "color": "#2ec4b6", "images": {"default": "assets/characters/ionic/ionic.png"}},
+    "ioniq5": {"name": "아이오닉 5", "title": "사수", "color": "#2ec4b6", "target": true, "images": {"default": "assets/characters/ionic/ionic.png"}},
     "broadcast": {"name": "방송", "color": "#6f7a8f"}
   },
   "routes": {
@@ -46,7 +52,8 @@
     "list": [
       {"character": "genesis", "start": "g1", "quote": "제네시스. '기원'이라는 뜻이죠. 수리비는 연봉에서 제하겠습니다."},
       {"character": "palisade", "start": "p1", "quote": "힘이 부족하면 언제든 헬스장으로 와!"},
-      {"character": "avante", "start": "a1", "quote": "너도 오늘 입사야? 다행이다, 나만 긴장한 줄."}
+      {"character": "avante", "start": "a1", "quote": "너도 오늘 입사야? 다행이다, 나만 긴장한 줄."},
+      {"character": "ioniq5", "start": "i1", "quote": "신입이죠? 사수 아이오닉 5예요. 충전기 쓸래요?"}
     ]
   },
   "backgrounds": {
@@ -134,6 +141,8 @@
     "palisade_normal": {"type": "normal", "title": "팰리세이드 노멀 엔딩", "character": "palisade"},
     "avante_happy": {"type": "happy", "title": "아반떼 해피 엔딩", "character": "avante"},
     "avante_normal": {"type": "normal", "title": "아반떼 노멀 엔딩", "character": "avante"},
+    "ioniq5_happy": {"type": "happy", "title": "아이오닉 5 해피 엔딩", "character": "ioniq5"},
+    "ioniq5_normal": {"type": "normal", "title": "아이오닉 5 노멀 엔딩", "character": "ioniq5"},
     "bad": {"type": "bad", "title": "배드 엔딩"}
   },
   "scenes": {
@@ -162,13 +171,13 @@
         {"sfx": "사내 방송 차임"},
         {"speaker": "broadcast", "text": "2026년 신입사원 여러분은 대강당으로 모여 주십시오."},
         {"speaker": "pony", "text": "2026…? 여기 어디야? 다들 엔진 소리가 안 나!"},
-        {"enter": "avante"},
+        {"enter": "avante", "outfit": {"avante": "suit"}},
         {"lamp": {"avante": "파랑"}},
-        {"speaker": "avante", "text": "너도 오늘 입사야? 다행이다, 나만 긴장한 줄."},
-        {"speaker": "avante", "text": "난 아반떼. 1990년 엘란트라 할아버지 때부터 대대로 국민차 집안이야."},
+        {"speaker": "avante", "text": "너도 오늘 입사야? 다행이다, 나만 긴장한 줄.", "expression": "shy"},
+        {"speaker": "avante", "text": "난 아반떼. 1990년 엘란트라 할아버지 때부터 대대로 국민차 집안이야.", "expression": "handshake"},
         {"card": "c06"},
         {"speaker": "pony", "text": "난 포니! 1975년식이야."},
-        {"speaker": "avante", "text": "하하, 농담도 무난하게 잘하네."},
+        {"speaker": "avante", "text": "하하, 농담도 무난하게 잘하네.", "expression": "happy"},
         {"exit": "avante"},
         {"bg": "02_hq_parking"},
         {"text": "입사식이 끝나고, 서두르던 포니는 클러치를 잘못 밟았다."},
@@ -256,7 +265,8 @@
         "options": [
           {"text": "행사 총괄, 제네시스 팀장", "next": "g1"},
           {"text": "행사장 설치, 팰리세이드 팀장", "next": "p1"},
-          {"require": {"avante": 2}, "text": "동기 아반떼와 리허설 준비", "next": "a1"}
+          {"require": {"avante": 2}, "text": "동기 아반떼와 리허설 준비", "next": "a1"},
+          {"text": "전시 준비, 아이오닉 5 사수", "next": "i1"}
         ],
         "prompt": "누구를 도울까?",
         "routeChoice": true
@@ -348,10 +358,10 @@
         {"filter": ["정전"]},
         {"enter": "genesis"},
         {"speaker": "genesis", "text": "무대 장치도, 문도 열리지 않습니다. 시간이 없는데…"},
-        {"enter": "avante"},
+        {"enter": "avante", "outfit": {"avante": "mechanic"}},
         {"lamp": {"avante": "빨강"}},
         {"sfx": "N 배기음 팡팡"},
-        {"speaker": "avante", "text": "비켜! N 모드 간다! 백업 장비, 3분이면 가져와!"},
+        {"speaker": "avante", "text": "비켜! N 모드 간다! 백업 장비, 3분이면 가져와!", "expression": "happy"},
         {"speaker": "avante", "text": "N은 남양연구소, 그리고 뉘르부르크링. 둘 다 N이야!"},
         {"card": "c11"},
         {"exit": "avante"},
@@ -607,27 +617,27 @@
         {"bg": "06_fuel_bar"},
         {"filter": ["밤"]},
         {"text": "리허설 준비 첫날, 신입 둘만의 회식."},
-        {"enter": "avante"},
+        {"enter": "avante", "outfit": {"avante": "casual"}},
         {"lamp": {"avante": "파랑"}},
-        {"speaker": "avante", "text": "우리는 일반유 두 잔이요. 가성비가 최고지."},
+        {"speaker": "avante", "text": "우리는 일반유 두 잔이요. 가성비가 최고지.", "expression": "drink"},
         {"speaker": "pony", "text": "역시 아반떼! 난 이런 게 좋아."},
-        {"speaker": "avante", "text": "다들 나보고 '무난하다'고 해. 칭찬인지 욕인지 모르겠어."},
+        {"speaker": "avante", "text": "다들 나보고 '무난하다'고 해. 칭찬인지 욕인지 모르겠어.", "expression": "eat"},
         {"speaker": "pony", "text": "무난한 게 어때서? 1975년엔 다들 무난한 차 한 대 갖는 게 꿈이었어."},
-        {"speaker": "avante", "text": "또 1975년이다. 넌 진짜 거기서 온 것 같아."},
-        {"speaker": "avante", "text": "우리 집안은 엘란트라 할아버지부터 국민차였어. 근데 난 한 번도 특별해 본 적이 없어."},
+        {"speaker": "avante", "text": "또 1975년이다. 넌 진짜 거기서 온 것 같아.", "expression": "happy"},
+        {"speaker": "avante", "text": "우리 집안은 엘란트라 할아버지부터 국민차였어. 근데 난 한 번도 특별해 본 적이 없어.", "expression": "sad"},
         {"speaker": "avante", "text": "사실 나, N 모드라는 게 있대. 근데 한 번도 못 켜 봤어."}
       ],
       "choice": {
         "options": [
           { "text": "\"언젠가 꼭 켜질 거야. 내가 보증해!\"", "affection": {"avante": 1}, "vars": {"good": 1}, "next": "a2",
               "lines": [
-                {"speaker": "avante", "text": "10년 10만 마일 보증처럼?"},
+                {"speaker": "avante", "text": "10년 10만 마일 보증처럼?", "expression": "happy"},
                 {"card": "c07"},
-                {"speaker": "avante", "text": "우리 회사가 품질로 이긴 이야기야. 너 보증은 믿어 볼게."}
+                {"speaker": "avante", "text": "우리 회사가 품질로 이긴 이야기야. 너 보증은 믿어 볼게.", "expression": "shy"}
               ] },
           { "text": "\"무난한 게 너다운 거야.\"", "next": "a2",
               "lines": [
-                {"speaker": "avante", "text": "…그렇지, 뭐."}
+                {"speaker": "avante", "text": "…그렇지, 뭐.", "expression": "sad"}
               ] }
         ]
       }
@@ -642,12 +652,12 @@
         {"enter": "genesis"},
         {"speaker": "genesis", "text": "문도, 무대 장치도 멈췄습니다. 누가 백업 장비를 가져와야 하는데…"},
         {"exit": "genesis"},
-        {"enter": "avante"},
-        {"speaker": "avante", "text": "제가요? 전 그냥 무난한…"},
+        {"enter": "avante", "outfit": {"avante": "mechanic"}},
+        {"speaker": "avante", "text": "제가요? 전 그냥 무난한…", "expression": "shy"},
         {"speaker": "pony", "text": "아반떼! 지금이야! 너는 무난한 게 아니라 든든한 거라고!"},
         {"lamp": {"avante": "빨강"}},
         {"sfx": "N 배기음 팡팡"},
-        {"speaker": "avante", "text": "…켜졌다. 비켜! 3분이면 돼!"},
+        {"speaker": "avante", "text": "…켜졌다. 비켜! 3분이면 돼!", "expression": "happy"},
         {"speaker": "avante", "text": "N은 남양연구소, 그리고 뉘르부르크링. 둘 다 N이야!"},
         {"card": "c11"},
         {"speaker": "pony", "text": "문은 내가 손으로 열게! 이봐, 해 봤어?"},
@@ -657,18 +667,18 @@
         {"speaker": "genesis", "text": "…신입 둘이 리허설을 살렸군요."},
         {"exit": "genesis"},
         {"lamp": {"avante": "파랑"}},
-        {"speaker": "avante", "text": "포니, 나 방금 특별했지?"}
+        {"speaker": "avante", "text": "포니, 나 방금 특별했지?", "expression": "happy"}
       ],
       "choice": {
         "options": [
           { "text": "\"넌 처음부터 특별했어.\"", "affection": {"avante": 1}, "vars": {"good": 1}, "next": "a3",
               "lines": [
                 {"lamp": {"avante": "분홍"}},
-                {"speaker": "avante", "text": "…그런 말, 처음 들어 봐."}
+                {"speaker": "avante", "text": "…그런 말, 처음 들어 봐.", "expression": "shy"}
               ] },
           { "text": "\"N 모드가 특별했지!\"", "next": "a3",
               "lines": [
-                {"speaker": "avante", "text": "아… 그치, N이 멋있지."}
+                {"speaker": "avante", "text": "아… 그치, N이 멋있지.", "expression": "jealous"}
               ] }
         ]
       }
@@ -677,30 +687,30 @@
       "lines": [
         {"bg": "08_design_archive"},
         {"text": "그날 밤, 둘은 디자인 자료실에서 오래된 사진을 발견했다."},
-        {"enter": "avante"},
-        {"speaker": "avante", "text": "1974년 토리노 모터쇼… 이 차, 너랑 똑같이 생겼어."},
+        {"enter": "avante", "outfit": {"avante": "mechanic"}},
+        {"speaker": "avante", "text": "1974년 토리노 모터쇼… 이 차, 너랑 똑같이 생겼어.", "expression": "neutral"},
         {"speaker": "pony", "text": "…응. 나야."},
         {"speaker": "pony", "text": "나 1975년에서 왔어. 행사 날 벼락이 치면 돌아가야 해."},
-        {"speaker": "pony", "text": "내가 안 돌아가면 첫 수출도, 첫 엔진도, 국민차도… 너도 없어."},
+        {"speaker": "pony", "text": "내가 안 돌아가면 첫 수출도, 첫 엔진도, 국민차도… 너도 없어.", "expression": {"avante": "sad"}},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
         {"speaker": "ioniq5", "text": "그래서였구나. 제 램프가 꺼지는 거. 전 선배를 보고 태어났거든요."},
         {"speaker": "ioniq5", "text": "1974년 포니 쿠페를 이어받아서, 2022년엔 세계 올해의 차까지 받았는데."},
         {"card": "c14"},
         {"lamp": {"avante": "회색"}},
-        {"speaker": "avante", "text": "어…? 나도 흐려진다. N 램프가 안 켜져."},
+        {"speaker": "avante", "text": "어…? 나도 흐려진다. N 램프가 안 켜져.", "expression": "sad"},
         {"speaker": "ioniq5", "text": "선배가 돌아가야 제가 태어나요. 그러니까 꼭 가요."},
-        {"speaker": "avante", "text": "난 싫어. 겨우 특별해졌는데, 너 없이?"}
+        {"speaker": "avante", "text": "난 싫어. 겨우 특별해졌는데, 너 없이?", "expression": "jealous"}
       ],
       "choice": {
         "options": [
           { "text": "\"넌 나 없어도 특별해. 그러니까 꼭 존재해 줘.\"", "affection": {"avante": 1}, "vars": {"good": 1}, "next": "a4",
               "lines": [
-                {"speaker": "avante", "text": "…치사하다, 그런 말."}
+                {"speaker": "avante", "text": "…치사하다, 그런 말.", "expression": "shy"}
               ] },
           { "text": "\"…나도 가기 싫어.\"", "next": "a4",
               "lines": [
-                {"speaker": "avante", "text": "그럼… 어떡하지."}
+                {"speaker": "avante", "text": "그럼… 어떡하지.", "expression": "sad"}
               ] }
         ]
       }
@@ -723,10 +733,10 @@
         {"sfx": "박수"},
         {"exit": "ioniq5"},
         {"sfx": "천둥"},
-        {"enter": "avante"},
+        {"enter": "avante", "outfit": {"avante": "suit"}},
         {"lamp": {"avante": "회색"}},
-        {"speaker": "avante", "text": "마지막 벼락이 무대 한가운데로 온대. 근데 거기까지 길이 막혔어."},
-        {"speaker": "avante", "text": "…내가 데려다줄게. 흐려져도 N은 N이야."},
+        {"speaker": "avante", "text": "마지막 벼락이 무대 한가운데로 온대. 근데 거기까지 길이 막혔어.", "expression": "sad"},
+        {"speaker": "avante", "text": "…내가 데려다줄게. 흐려져도 N은 N이야.", "expression": "confess"},
         {"lamp": {"avante": "빨강"}},
         {"sfx": "N 배기음 팡팡"}
       ],
@@ -741,17 +751,17 @@
       "lines": [
         {"ending": "avante_happy"},
         {"sfx": "질주"},
-        {"speaker": "avante", "text": "포니! 다음에 만나면 내가 선배다?"},
+        {"speaker": "avante", "text": "포니! 다음에 만나면 내가 선배다?", "expression": "happy"},
         {"speaker": "pony", "text": "무슨 소리야, 영원히 내가 선배야!"},
         {"sfx": "벼락"},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
-        {"enter": "avante"},
+        {"enter": "avante", "outfit": {"avante": "casual"}},
         {"lamp": {"avante": "분홍"}},
-        {"speaker": "avante", "text": "연수 첫날이랑 똑같네. 너 하나도 안 변했다."},
-        {"speaker": "avante", "text": "나 요즘은 '무난한' 대신 '든든한'이라고 불려."},
+        {"speaker": "avante", "text": "연수 첫날이랑 똑같네. 너 하나도 안 변했다.", "expression": "holdhand"},
+        {"speaker": "avante", "text": "나 요즘은 '무난한' 대신 '든든한'이라고 불려.", "expression": "happy"},
         {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
       ],
       "next": "epilogue"
@@ -762,9 +772,163 @@
         {"sfx": "벼락"},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
-        {"enter": "avante"},
-        {"speaker": "avante", "text": "그때 동기, 잘 지내려나."},
+        {"enter": "avante", "outfit": {"avante": "casual"}},
+        {"speaker": "avante", "text": "그때 동기, 잘 지내려나.", "expression": "sad"},
         {"text": "포니는 대답하지 않았다."}
+      ],
+      "next": "epilogue"
+    },
+    "i1": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"bg": "02_hq_parking"},
+        {"filter": ["밤"]},
+        {"text": "행사까지 30일. 포니는 사수 아이오닉 5와 함께 전시 준비를 맡았다."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "파랑"}},
+        {"speaker": "ioniq5", "text": "신입, 오늘은 전시차 목록 정리예요. 끝나면 충전하고 가요."},
+        {"speaker": "pony", "text": "선임님, 저는 충전 말고 주유를…"},
+        {"speaker": "ioniq5", "text": "아, 맞다. 휘발유. 아직도 적응이 안 되네요."},
+        {"speaker": "ioniq5", "text": "그럼 제 전기를 나눠 줄게요. 저는 차 밖으로도 전기를 꺼내 쓸 수 있거든요."},
+        {"speaker": "pony", "text": "차가… 전기를 나눠 준다고요?"},
+        {"speaker": "ioniq5", "text": "캠핑 가면 전기밥솥도 돌려요. 오늘은 컵라면 물을 끓일 거예요."},
+        {"speaker": "pony", "text": "(1975년엔 기름 한 방울도 아꼈는데. 여긴 전기를 나눠 쓰는구나.)"},
+        {"speaker": "ioniq5", "text": "…그런데 신입, 진짜 어디서 본 것 같아요."},
+        {"lamp": {"ioniq5": "노랑"}},
+        {"speaker": "ioniq5", "text": "아, 미안해요. 이상한 소리 했죠."}
+      ],
+      "choice": {
+        "options": [
+          { "text": "\"저도 선임님이 처음 본 사람 같지 않아요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i2",
+              "lines": [
+                {"lamp": {"ioniq5": "분홍"}},
+                {"speaker": "ioniq5", "text": "…그럼 우리, 진짜 어디서 만났나 봐요."}
+              ] },
+          { "text": "\"흔한 얼굴이라 그래요.\"", "next": "i2",
+              "lines": [
+                {"speaker": "ioniq5", "text": "그런가요? 흔한 얼굴은 아닌데."}
+              ] }
+        ]
+      }
+    },
+    "i2": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"bg": "08_design_archive"},
+        {"text": "전시 자료를 찾으러 들어간 디자인 자료실."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "파랑"}},
+        {"speaker": "ioniq5", "text": "찾았다. 이게 제 디자인의 뿌리예요."},
+        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠."},
+        {"card": "c14"},
+        {"speaker": "pony", "text": "…이건 나랑 같이 토리노에 갔던 차잖아."},
+        {"speaker": "ioniq5", "text": "네? 신입이 그걸 어떻게…"},
+        {"sfx": "지직"},
+        {"lamp": {"ioniq5": "회색"}},
+        {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지."},
+        {"text": "아이오닉 5의 픽셀 램프가 하나, 꺼졌다."},
+        {"speaker": "pony", "text": "(나 때문이야. 내가 여기 있으면…)"}
+      ],
+      "choice": {
+        "options": [
+          { "text": "\"사실 저, 1975년에서 왔어요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i3",
+              "lines": [
+                {"speaker": "ioniq5", "text": "…그래서 익숙했구나. 제가 닮은 얼굴이 선배였어요."}
+              ] },
+          { "text": "\"고장 난 거예요. 정비소에 가 봐요.\"", "next": "i3",
+              "lines": [
+                {"speaker": "ioniq5", "text": "…그렇겠죠. 내일 가 볼게요."}
+              ] }
+        ]
+      }
+    },
+    "i3": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"bg": "11_coastal_drive"},
+        {"filter": ["밤"]},
+        {"text": "며칠 뒤 밤, 아이오닉 5가 드라이브를 가자고 했다."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "회색"}},
+        {"speaker": "ioniq5", "text": "배터리는 꽉 찼는데, 몸은 자꾸 흐려져요."},
+        {"speaker": "ioniq5", "text": "선배가 돌아가야 포니가 출고되고, 그래야 제가 태어나요. 계산은 간단하죠."},
+        {"speaker": "pony", "text": "그럼 선임님은요? 제가 돌아가면, 오늘 일은 기억해요?"},
+        {"speaker": "ioniq5", "text": "모르겠어요. 다시 태어난 저는 오늘을 모를 수도 있어요."},
+        {"speaker": "ioniq5", "text": "그래도 괜찮아요. 제 디자인 안에 선배가 있으니까."}
+      ],
+      "choice": {
+        "options": [
+          { "text": "\"선임님이 잊어도, 제가 기억할게요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i4",
+              "lines": [
+                {"lamp": {"ioniq5": "분홍"}},
+                {"speaker": "ioniq5", "text": "…그럼 저는 그 기억을 닮아서 태어날게요."}
+              ] },
+          { "text": "\"저도 잘 모르겠어요.\"", "next": "i4",
+              "lines": [
+                {"speaker": "ioniq5", "text": "그렇죠. 저도요."}
+              ] }
+        ]
+      }
+    },
+    "i4": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"bg": "04_event_stage"},
+        {"filter": ["밤"]},
+        {"text": "30일째 밤. 포니 50주년 행사."},
+        {"speaker": "broadcast", "text": "1976년, 에콰도르로 떠난 포니 6대가 시작이었습니다."},
+        {"card": "c04"},
+        {"sfx": "벼락"},
+        {"flash": true},
+        {"filter": ["정전"]},
+        {"speaker": "pony", "text": "무대는 내가 비출게!"},
+        {"sfx": "수동 시동 부르릉"},
+        {"text": "포니의 헤드램프가 무대를 밝혔다."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "회색"}},
+        {"speaker": "ioniq5", "text": "음향은 제가 맡을게요. 남은 전기, 전부 꺼내 쓸게요."},
+        {"sfx": "박수"},
+        {"speaker": "ioniq5", "text": "거봐요. 전기는 나눠 쓰는 거라고 했죠."},
+        {"sfx": "천둥"},
+        {"speaker": "ioniq5", "text": "다음 벼락이에요. 가요, 선배. 그래야 제가 태어나요."},
+        {"speaker": "ioniq5", "text": "…그래도 마지막으로 한 번만, 신입이라고 불러도 돼요?"}
+      ],
+      "choice": {
+        "options": [
+          {"text": "\"돌아갈게요. 선임님이 태어날 미래를 위해.\"", "next": {"if": {"good": 2}, "then": "i_happy", "else": "i_normal"}},
+          {"text": "\"남을래요.\"", "next": "bad"}
+        ]
+      }
+    },
+    "i_happy": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"ending": "ioniq5_happy"},
+        {"speaker": "ioniq5", "text": "신입. …다녀와요."},
+        {"sfx": "벼락"},
+        {"bg": "01_1975_factory"},
+        {"text": "1975년 12월. 포니는 무사히 출고되었다."},
+        {"bg": "05_heritage_museum"},
+        {"text": "2026년, 헤리티지 박물관."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "분홍"}},
+        {"speaker": "ioniq5", "text": "처음 와 보는 곳인데, 이상하게 익숙해요."},
+        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 사진 앞에 서면, 누가 저를 기억해 주는 기분이 들거든요."},
+        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
+      ],
+      "next": "epilogue"
+    },
+    "i_normal": {
+      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"ending": "ioniq5_normal"},
+        {"sfx": "벼락"},
+        {"bg": "05_heritage_museum"},
+        {"text": "2026년, 헤리티지 박물관."},
+        {"enter": "ioniq5"},
+        {"lamp": {"ioniq5": "파랑"}},
+        {"speaker": "ioniq5", "text": "포니 50주년 전시… 사진 속 얼굴이 낯설지 않네."},
+        {"text": "박물관의 포니는 끝내 깜빡이지 않았다."}
       ],
       "next": "epilogue"
     },

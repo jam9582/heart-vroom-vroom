@@ -23,7 +23,7 @@
     for (const id of targetIds()) aff[id] = story.affection?.initial ?? 0;
     return {
       sceneId: null, lines: [], index: -1, done: null,
-      affection: aff, vars: {}, onStage: [], lamps: {}, filters: [], bg: null,
+      affection: aff, vars: {}, onStage: [], lamps: {}, outfits: {}, exprs: {}, filters: [], bg: null,
       cards: [], ending: null, waiting: false, auto: false, log: [], route: null,
     };
   }
@@ -80,7 +80,19 @@
     if (line.filter !== undefined) setFilters(line.filter);
     if (line.flash) flash();
     if (line.exit) { state.onStage = state.onStage.filter((id) => id !== line.exit); stageChanged = true; }
-    if (line.enter && !state.onStage.includes(line.enter)) { state.onStage.push(line.enter); stageChanged = true; }
+    if (line.enter && !state.onStage.includes(line.enter)) {
+      state.onStage.push(line.enter);
+      delete state.exprs[line.enter];   // 새로 등장하면 기본 표정
+      stageChanged = true;
+    }
+    if (line.outfit) { Object.assign(state.outfits, line.outfit); stageChanged = true; }
+    if (line.expression) {
+      // "expression": "sad" 는 말하는 캐릭터, { "avante": "sad" } 는 지정한 캐릭터. 바꾸기 전까지 유지됨
+      const e = typeof line.expression === 'string'
+        ? (line.speaker ? { [line.speaker]: line.expression } : {}) : line.expression;
+      Object.assign(state.exprs, e);
+      stageChanged = true;
+    }
     if (line.lamp) { Object.assign(state.lamps, line.lamp); stageChanged = true; }
     if (line.bgm !== undefined) playBgm(line.bgm);
     if (line.sfx) playSfx(line.sfx);
@@ -110,7 +122,7 @@
   function showText(line) {
     const ch = story.characters[line.speaker];
     const onStage = state.onStage.includes(line.speaker);
-    renderStage(onStage ? line.speaker : null, line.expression);
+    renderStage(onStage ? line.speaker : null);
 
     const plate = $('nameplate');
     plate.classList.toggle('show', !!ch);
@@ -225,6 +237,7 @@
     // 배경이 바뀌면 필터와 등장인물 초기화
     setFilters([]);
     state.onStage = [];
+    state.exprs = {};
     renderStage(null);
   }
 
@@ -328,7 +341,18 @@
 
   // ---------- 화면 그리기 ----------
   // 무대 위 캐릭터를 id별로 유지해서, 표정만 바뀔 때 깜빡이지 않게 함
-  function renderStage(speaker, expression) {
+  // 의상 + 표정으로 그림 고르기: suit_sad → suit_neutral → sad → default 순서로 있는 것
+  function imageFor(id) {
+    const imgs = story.characters[id].images || {};
+    const outfit = state.outfits[id] || story.characters[id].outfit;   // 정하지 않았으면 캐릭터 기본 의상
+    const expr = state.exprs[id];
+    const keys = outfit ? [`${outfit}_${expr || 'neutral'}`, `${outfit}_neutral`] : [];
+    if (expr) keys.push(expr);
+    keys.push('default');
+    return imgs[keys.find((k) => imgs[k])] || '';
+  }
+
+  function renderStage(speaker) {
     const stage = $('stage');
     const ids = state.onStage.filter((id) => story.characters[id]);
     stage.dataset.count = ids.length;
@@ -347,9 +371,7 @@
       el.classList.toggle('has-lamp', !!lamp);
       el.classList.toggle('faded', !!lamp?.fade);
       const ch = story.characters[id];
-      const want = (speaker === id && expression && ch.images?.[expression]) ||
-                   (speaker === id ? null : el.dataset.src) || ch.images?.default || '';
-      setCharImage(el, want, ch.images?.default);
+      setCharImage(el, imageFor(id), ch.images?.default);
       if (el.parentNode !== stage) stage.appendChild(el);
     });
   }
@@ -375,18 +397,25 @@
     return el;
   }
 
-  // 이미지 로드 실패 시: 표정 이미지 → 기본 이미지 → 실루엣 순서로 대체
+  // 새 그림을 다 받은 뒤에 바꿔서 깜빡이지 않게 함
+  // 로드 실패 시: 표정 이미지 → 기본 이미지 → 실루엣 순서로 대체
   function setCharImage(el, src, fallback) {
     if (el.dataset.src === src) return;
     el.dataset.src = src;
     const img = el.querySelector('img');
     if (!src) { el.classList.remove('has-image'); img.removeAttribute('src'); return; }
-    img.onload = () => el.classList.add('has-image');
-    img.onerror = () => {
+    const loader = new Image();
+    loader.onload = () => {
+      if (el.dataset.src !== src) return;   // 그 사이 다른 그림으로 바뀜
+      img.src = src;
+      el.classList.add('has-image');
+    };
+    loader.onerror = () => {
+      if (el.dataset.src !== src) return;
       if (fallback && src !== fallback) setCharImage(el, fallback, null);
       else el.classList.remove('has-image');
     };
-    img.src = src;
+    loader.src = src;
   }
 
   function heartRow(id, cls) {
@@ -494,12 +523,24 @@
     const title = story.meta?.title || '';
     $('title-logo-text').textContent = title;
     $('title-sub').textContent = story.meta?.subtitle || '';
+    $('credits-team').textContent = story.meta?.credits?.team || '';
+    $('credits-members').textContent = story.meta?.credits?.members || '';
     document.title = title || document.title;
     const img = $('title-logo-img');
     img.alt = title;
     img.onload = () => $('title-logo').classList.add('has-image');
     img.onerror = () => $('title-logo').classList.remove('has-image');
     if (story.meta?.logo) img.src = story.meta.logo;
+    // 시작 화면 배경 그림 (없으면 기존 그라데이션 유지)
+    const bg = story.meta?.titleBackground;
+    if (bg) {
+      const pic = new Image();
+      pic.onload = () => {
+        $('title-screen').style.setProperty('--title-bg', `url("${bg}")`);
+        $('title-screen').classList.add('has-bg');
+      };
+      pic.src = bg;
+    }
   }
 
   // ---------- 공략 대상 선택 ----------
@@ -664,6 +705,9 @@
       for (const [c, color] of Object.entries(l.lamp || {})) {
         if (!chars[c]) warn(`${where}: 램프 캐릭터 "${c}"가 없습니다.`);
         if (!story.lamps?.[color]) warn(`${where}: 램프 색 "${color}"가 lamps에 없습니다.`);
+      }
+      for (const [c, o] of Object.entries(l.outfit || {})) {
+        if (!Object.keys(chars[c]?.images || {}).some((k) => k.startsWith(o + '_'))) warn(`${where}: "${c}"에게 의상 "${o}" 그림이 없습니다.`);
       }
       if (l.bgm && !story.music?.[l.bgm]) warn(`${where}: 배경음악 "${l.bgm}"이 music에 없습니다.`);
       if (l.card && !story.cards?.[l.card]) warn(`${where}: 카드 "${l.card}"가 cards에 없습니다.`);
