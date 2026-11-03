@@ -134,6 +134,7 @@
     plate.style.setProperty('--lamp', lamp?.color || 'transparent');
     $('dialog').style.setProperty('--speaker', ch ? ch.color : 'rgba(255,255,255,.35)');
     $('dialog').classList.toggle('narration', !ch);
+    renderSidePortrait(ch?.side ? line.speaker : null, lamp);
 
     const text = String(line.text ?? '');
     $('text').classList.toggle('thought', /^\(.*\)$/s.test(text.trim()));
@@ -378,6 +379,20 @@
       setCharImage(el, imageFor(id), ch.images?.default);
       if (el.parentNode !== stage) stage.appendChild(el);
     });
+  }
+
+  // 주인공(side: true)은 무대 대신 대사창 왼쪽 위에 상반신 초상화로 표시
+  function renderSidePortrait(id, lamp) {
+    const box = $('side-portrait');
+    $('dialog').classList.toggle('has-side', !!id);
+    if (!id) return;
+    box.style.setProperty('--lamp', lamp?.color || 'transparent');
+    const src = imageFor(id);
+    if (box.dataset.src === src) return;
+    box.dataset.src = src;
+    const loader = new Image();
+    loader.onload = () => { if (box.dataset.src === src) box.querySelector('img').src = src; };
+    loader.src = src;
   }
 
   function createChar(id) {

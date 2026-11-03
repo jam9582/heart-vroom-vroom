@@ -74,7 +74,7 @@ button { font-family: inherit; cursor: pointer; }
 .card-pop .card-label { font-size: 10px; letter-spacing: .12em; color: rgba(255, 217, 138, .85); }
 .card-pop .card-label b { margin-left: 4px; padding: 0 5px; border-radius: 99px; background: rgba(255, 93, 143, .85); color: #fff; font-size: 9px; letter-spacing: .05em; }
 .card-pop .card-year { display: inline; font-family: var(--font-title); font-size: 16px; color: #ffe7b0; margin-right: 6px; }
-.card-pop .card-text { display: inline; font-size: 12px; color: rgba(255, 255, 255, .85); }
+.card-pop .card-text { display: inline; font-size: 12px; color: rgba(255, 255, 255, .85); word-break: keep-all; }
 @keyframes card {
   0% { opacity: 0; transform: translateX(-12px); }
   10%, 80% { opacity: .9; transform: none; }
@@ -204,6 +204,21 @@ button { font-family: inherit; cursor: pointer; }
   opacity: 0; transition: opacity .2s;
 }
 #nameplate.show { opacity: 1; }
+/* 주인공 측면 초상화: 대사창 왼쪽 위로 솟아오름 */
+#side-portrait {
+  position: absolute; left: 10px; bottom: calc(100% - 30px); width: 210px; height: 250px;
+  overflow: hidden; pointer-events: none; opacity: 0; transform: translateY(8px);
+  transition: opacity .25s, transform .25s;
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
+  mask-image: linear-gradient(180deg, #000 78%, transparent);
+}
+#side-portrait img {
+  position: absolute; top: 0; left: 50%; width: var(--zoom, 175%); transform: translateX(-50%);
+  filter: drop-shadow(0 0 10px var(--lamp, transparent)); transition: filter .4s;
+}
+#side-portrait img:not([src]) { display: none; }
+#dialog.has-side #side-portrait { opacity: 1; transform: none; }
+#dialog.has-side #nameplate { left: 226px; }
 #nameplate .lamp-dot { display: none; width: 10px; height: 10px; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 8px 2px var(--lamp), 0 0 0 2px rgba(255, 255, 255, .6); }
 #nameplate.has-lamp .lamp-dot { display: block; }
 #text { font-size: clamp(16px, 1.6vw, 20px); line-height: 1.75; min-height: 3.5em; white-space: pre-wrap; word-break: keep-all; }
@@ -432,6 +447,8 @@ button { font-family: inherit; cursor: pointer; }
 
   #dialog { bottom: calc(10px + var(--safe-b)); width: calc(100% - 20px); min-height: 26%; padding: 28px 18px 30px; border-radius: 16px; }
   #nameplate { left: 16px; font-size: 17px; padding: 5px 16px; }
+  #side-portrait { --zoom: 230%; left: 4px; width: 128px; height: 160px; bottom: calc(100% - 18px); }
+  #dialog.has-side #nameplate { left: 134px; }
   #text { font-size: 16px; line-height: 1.7; }
   #menu { top: auto; bottom: 6px; right: auto; left: 12px; }
   #next-indicator { right: 18px; bottom: 10px; }
