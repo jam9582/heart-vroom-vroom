@@ -31,7 +31,7 @@
   "settings": {
     "textSpeed": 28,
     "autoDelay": 1400,
-    "showSfxText": true,
+    "showSfxText": false,
     "musicVolume": 0.5,
     "sfxVolume": 0.8
   },
@@ -43,7 +43,7 @@
   "characters": {
     "pony": {"name": "포니", "color": "#d9483b", "images": {"default": "assets/characters/pony/pony.png"}},
     "avante": {"name": "아반떼", "title": "동기", "color": "#f2994a", "target": true, "outfit": "suit", "images": {"default": "assets/characters/avante/suit_neutral.png", "casual_neutral": "assets/characters/avante/casual_neutral.png", "casual_happy": "assets/characters/avante/casual_happy.png", "casual_shy": "assets/characters/avante/casual_shy.png", "casual_sad": "assets/characters/avante/casual_sad.png", "casual_jealous": "assets/characters/avante/casual_jealous.png", "casual_handshake": "assets/characters/avante/casual_handshake.png", "casual_holdhand": "assets/characters/avante/casual_holdhand.png", "casual_drink": "assets/characters/avante/casual_drink.png", "casual_eat": "assets/characters/avante/casual_eat.png", "casual_confess": "assets/characters/avante/casual_confess.png", "casual_marry": "assets/characters/avante/casual_marry.png", "mechanic_neutral": "assets/characters/avante/mechanic_neutral.png", "mechanic_happy": "assets/characters/avante/mechanic_happy.png", "mechanic_shy": "assets/characters/avante/mechanic_shy.png", "mechanic_sad": "assets/characters/avante/mechanic_sad.png", "mechanic_jealous": "assets/characters/avante/mechanic_jealous.png", "mechanic_handshake": "assets/characters/avante/mechanic_handshake.png", "mechanic_holdhand": "assets/characters/avante/mechanic_holdhand.png", "mechanic_drink": "assets/characters/avante/mechanic_drink.png", "mechanic_eat": "assets/characters/avante/mechanic_eat.png", "mechanic_confess": "assets/characters/avante/mechanic_confess.png", "mechanic_marry": "assets/characters/avante/mechanic_marry.png", "suit_neutral": "assets/characters/avante/suit_neutral.png", "suit_happy": "assets/characters/avante/suit_happy.png", "suit_shy": "assets/characters/avante/suit_shy.png", "suit_sad": "assets/characters/avante/suit_sad.png", "suit_jealous": "assets/characters/avante/suit_jealous.png", "suit_handshake": "assets/characters/avante/suit_handshake.png", "suit_holdhand": "assets/characters/avante/suit_holdhand.png", "suit_drink": "assets/characters/avante/suit_drink.png", "suit_eat": "assets/characters/avante/suit_eat.png", "suit_confess": "assets/characters/avante/suit_confess.png", "suit_marry": "assets/characters/avante/suit_marry.png"}},
-    "genesis": {"name": "제네시스", "title": "행사 총괄 팀장", "color": "#9aa0b8", "target": true, "images": {"default": "assets/characters/genesis/genesis.png"}},
+    "genesis": {"name": "제네시스", "title": "행사 총괄 팀장", "color": "#9aa0b8", "target": true, "outfit": "suit", "images": {"default": "assets/characters/genesis/edfbd237-7890-4be8-96d9-6e513c42c2f7.png", "suit_neutral": "assets/characters/genesis/edfbd237-7890-4be8-96d9-6e513c42c2f7.png", "suit_happy": "assets/characters/genesis/3fb99b24-bec9-4b19-ae0e-52e16066d6db.png", "suit_shy": "assets/characters/genesis/868e7639-b6db-48fa-a8dd-97557815f8a5.png", "suit_sad": "assets/characters/genesis/069c361a-7742-46be-8028-661c8e7c60ab.png", "suit_jealous": "assets/characters/genesis/711e4cf3-5067-47bd-b06e-a610cf620684.png", "suit_handshake": "assets/characters/genesis/c2dfea55-9256-4a74-8591-75159db01663.png", "suit_holdhand": "assets/characters/genesis/b4d2ca7b-b5c0-47d5-8121-86425ea9f8da.png", "suit_drink": "assets/characters/genesis/8e9b3b8b-1fdf-4675-a073-737c740574a9.png", "suit_eat": "assets/characters/genesis/9816815a-c6d0-4c30-a179-513d0ad52b3f.png", "suit_confess": "assets/characters/genesis/5ea25751-0d95-405a-b0c9-a88c4f8a633a.png", "suit_marry": "assets/characters/genesis/f72de31f-62fc-4b62-8287-0d77e2e65913.png", "casual_neutral": "assets/characters/genesis/5cf3db59-6dd3-4bef-9a6c-bc7817040b41.png", "casual_happy": "assets/characters/genesis/e12f2402-b87b-4fde-88a3-8419fb098024.png", "casual_shy": "assets/characters/genesis/068132a7-a10d-4714-889d-53c24bcd7707.png", "casual_sad": "assets/characters/genesis/bc4deb86-2720-4e03-b15d-15fa2da43ece.png", "casual_jealous": "assets/characters/genesis/d196e30c-c26f-4adf-afc3-09981f1cb3ef.png", "casual_handshake": "assets/characters/genesis/613c0fe3-8bda-4886-bfeb-b23a14af0ac1.png", "casual_holdhand": "assets/characters/genesis/0071644d-5364-4509-9596-bff88d13cbac.png", "casual_drink": "assets/characters/genesis/ecc8f52e-7bda-45c9-bc70-8b4289e35ca5.png", "casual_eat": "assets/characters/genesis/953acea9-4052-444f-a070-7e027d09839f.png", "casual_confess": "assets/characters/genesis/24065fdc-2044-496f-b455-b503ef999f60.png", "casual_marry": "assets/characters/genesis/60394dc7-13e3-4e0a-8efc-43125525f803.png", "uniform_neutral": "assets/characters/genesis/fae74a77-ccd8-4d81-a630-fe61573a1c0f.png", "uniform_happy": "assets/characters/genesis/d215fb16-d20b-4b53-820b-bea58d48f182.png", "uniform_shy": "assets/characters/genesis/38c1dc06-27a9-44ec-ae38-355123376e45.png", "uniform_sad": "assets/characters/genesis/49d83421-15a6-4162-b846-183dfde2306b.png", "uniform_jealous": "assets/characters/genesis/cb73ed2c-be22-4a24-a4bd-c90722fcbd73.png", "uniform_handshake": "assets/characters/genesis/4cc3e1a3-6c7d-45b7-81b4-1c010e003a17.png", "uniform_holdhand": "assets/characters/genesis/d9c67500-644f-4eca-8dc4-9b057e3440d6.png", "uniform_drink": "assets/characters/genesis/00150a2f-a29d-4974-a54e-42602bb57357.png", "uniform_eat": "assets/characters/genesis/b8f1ab39-a7ab-4ce0-9c87-3d99c8e191ff.png", "uniform_confess": "assets/characters/genesis/5a704c8a-4e3e-4097-9f37-482878c02d4e.png", "uniform_marry": "assets/characters/genesis/제네시스 추가.png"}},
     "palisade": {"name": "팰리세이드", "title": "옆 팀장", "color": "#4caf7a", "target": true, "outfit": "casual", "images": {"default": "assets/characters/palisade/casual_neutral.png", "casual_confess": "assets/characters/palisade/casual_confess.png", "casual_drink": "assets/characters/palisade/casual_drink.png", "casual_eat": "assets/characters/palisade/casual_eat.png", "casual_handshake": "assets/characters/palisade/casual_handshake.png", "casual_happy": "assets/characters/palisade/casual_happy.png", "casual_holdhand": "assets/characters/palisade/casual_holdhand.png", "casual_jealous": "assets/characters/palisade/casual_jealous.png", "casual_marry": "assets/characters/palisade/casual_marry.png", "casual_neutral": "assets/characters/palisade/casual_neutral.png", "casual_sad": "assets/characters/palisade/casual_sad.png", "casual_shy": "assets/characters/palisade/casual_shy.png", "mechanic_confess": "assets/characters/palisade/mechanic_confess.png", "mechanic_drink": "assets/characters/palisade/mechanic_drink.png", "suit_neutral": "assets/characters/palisade/suit_neutral.png"}},
     "ioniq5": {"name": "아이오닉 5", "title": "사수", "color": "#2ec4b6", "target": true, "images": {"default": "assets/characters/ionic/03_인사_커피.png", "neutral": "assets/characters/ionic/03_인사_커피.png", "shy": "assets/characters/ionic/01_쑥스러움.png", "jealous": "assets/characters/ionic/02_화남.png", "happy": "assets/characters/ionic/04_응원.png", "sad": "assets/characters/ionic/05_시무룩.png", "drink": "assets/characters/ionic/06_맥주.png", "eat": "assets/characters/ionic/07_식사.png", "handshake": "assets/characters/ionic/08_손내밀기.png", "holdhand": "assets/characters/ionic/09_손잡기.png", "confess": "assets/characters/ionic/10_꽃다발.png", "marry": "assets/characters/ionic/11_프러포즈.png"}},
     "broadcast": {"name": "방송", "color": "#6f7a8f"}
@@ -183,13 +183,13 @@
         {"bg": "02_hq_parking"},
         {"text": "입사식이 끝나고, 서두르던 포니는 클러치를 잘못 밟았다."},
         {"sfx": "범퍼 콕"},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"lamp": {"genesis": "빨강"}},
-        {"speaker": "genesis", "text": "…방금 왁스칠한 범퍼입니다."},
+        {"speaker": "genesis", "text": "…방금 왁스칠한 범퍼입니다.", "expression": "jealous"},
         {"speaker": "genesis", "text": "제네시스. '기원'이라는 뜻이죠. 수리비는 연봉에서 제하겠습니다."},
         {"card": "c10"},
         {"speaker": "pony", "text": "(기원이면… 원조는 난데.)"},
-        {"speaker": "genesis", "text": "배치표를 보니, 내 팀이군요. 신입."},
+        {"speaker": "genesis", "text": "배치표를 보니, 내 팀이군요. 신입.", "expression": "neutral"},
         {"exit": "genesis"}
       ],
       "choice": {
@@ -324,34 +324,34 @@
         {"bg": "10_night_office"},
         {"filter": ["밤"]},
         {"text": "행사까지 30일. 포니는 매일 밤 제네시스 팀에 남았다."},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "casual"}},
         {"lamp": {"genesis": "파랑"}},
         {"speaker": "genesis", "text": "아직 안 갔습니까, 신입."},
         {"speaker": "pony", "text": "범퍼 광택, 아직 다 못 냈잖아요. 빚은 갚아야죠!"},
-        {"speaker": "genesis", "text": "…고급유밖에 없지만, 마시겠습니까?"},
+        {"speaker": "genesis", "text": "…고급유밖에 없지만, 마시겠습니까?", "expression": "eat"},
         {"sfx": "주유 쪼르륵"},
         {"speaker": "pony", "text": "우와, 이게 고급유…! 1975년엔 구경도 못 했어요."},
-        {"speaker": "genesis", "text": "또 1975년 농담이군요."},
+        {"speaker": "genesis", "text": "또 1975년 농담이군요.", "expression": "neutral"},
         {"speaker": "pony", "text": "팀장님은 왜 맨날 늦게까지 있어요?"},
         {"speaker": "genesis", "text": "이번 행사를 성공시켜야 그룹의 후계자로 인정받습니다."},
-        {"speaker": "genesis", "text": "2008년, 나는 고급 세단 하나로 태어났습니다. 이듬해 북미 올해의 차를 받았고, 2015년에 독립했죠."},
+        {"speaker": "genesis", "text": "2008년, 나는 고급 세단 하나로 태어났습니다. 이듬해 북미 올해의 차를 받았고, 2015년에 독립했죠.", "expression": "drink"},
         {"card": "c08"},
-        {"speaker": "genesis", "text": "한때 우리는 '싸지만 잘 고장 나는 차'라는 소리를 들었습니다."},
-        {"speaker": "genesis", "text": "그래서 10년 10만 마일 보증으로 답했죠. 품질은, 약속입니다."},
+        {"speaker": "genesis", "text": "한때 우리는 '싸지만 잘 고장 나는 차'라는 소리를 들었습니다.", "expression": "sad"},
+        {"speaker": "genesis", "text": "그래서 10년 10만 마일 보증으로 답했죠. 품질은, 약속입니다.", "expression": "neutral"},
         {"card": "c07"},
         {"speaker": "pony", "text": "그래서 왁스칠 하나에도 그렇게 진심이었구나."},
         {"lamp": {"genesis": "분홍"}},
-        {"speaker": "genesis", "text": "…쓸데없는 데 눈치가 빠르군요."}
+        {"speaker": "genesis", "text": "…쓸데없는 데 눈치가 빠르군요.", "expression": "shy"}
       ],
       "choice": {
         "options": [
           { "text": "\"팀장님 혼자 짊어지지 마세요.\"", "affection": {"genesis": 1}, "vars": {"good": 1}, "next": "g2",
               "lines": [
-                {"speaker": "genesis", "text": "…신입이 할 말은 아니군요. 고맙습니다."}
+                {"speaker": "genesis", "text": "…신입이 할 말은 아니군요. 고맙습니다.", "expression": "shy"}
               ] },
           { "text": "\"후계자라니, 부러워요!\"", "next": "g2",
               "lines": [
-                {"speaker": "genesis", "text": "부러워할 자리는 아닙니다."}
+                {"speaker": "genesis", "text": "부러워할 자리는 아닙니다.", "expression": "sad"}
               ] }
         ]
       }
@@ -366,12 +366,12 @@
         {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠.", "expression": "happy"},
         {"card": "c14"},
         {"speaker": "pony", "text": "이건… 1974년 토리노에서 나랑 같이 공개된 차잖아."},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"speaker": "genesis", "text": "역시, 기억하고 있었군요."},
         {"speaker": "genesis", "text": "선대에게 들었습니다. 1975년에서 온 포니가 언젠가 나타날 거라고."},
         {"speaker": "pony", "text": "팀장님, 처음부터 알았어요?"},
         {"speaker": "genesis", "text": "이 그룹은 당신에게서 시작됐습니다."},
-        {"speaker": "genesis", "text": "당신이 돌아가지 않으면 첫 수출도, 우리 엔진도, 그 뒤의 우리도 없습니다."},
+        {"speaker": "genesis", "text": "당신이 돌아가지 않으면 첫 수출도, 우리 엔진도, 그 뒤의 우리도 없습니다.", "expression": "sad"},
         {"sfx": "지직"},
         {"lamp": {"ioniq5": "회색"}},
         {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지.", "expression": "sad"},
@@ -380,17 +380,17 @@
         {"speaker": "pony", "text": "그럼 팀장님이 저한테 차갑게 굴었던 건…"},
         {"speaker": "genesis", "text": "정들면 보내기 힘들 것 같아서였습니다."},
         {"lamp": {"genesis": "분홍"}},
-        {"speaker": "genesis", "text": "…실패했지만."}
+        {"speaker": "genesis", "text": "…실패했지만.", "expression": "shy"}
       ],
       "choice": {
         "options": [
           { "text": "\"그래도 저, 팀장님 옆에 있을래요.\"", "affection": {"genesis": 1}, "vars": {"good": 1}, "next": "g3",
               "lines": [
-                {"speaker": "genesis", "text": "그 말이 제일 곤란합니다."}
+                {"speaker": "genesis", "text": "그 말이 제일 곤란합니다.", "expression": "shy"}
               ] },
           { "text": "\"그럼 지금부터 거리 둘게요.\"", "next": "g3",
               "lines": [
-                {"speaker": "genesis", "text": "…현명한 판단입니다."}
+                {"speaker": "genesis", "text": "…현명한 판단입니다.", "expression": "jealous"}
               ] }
         ]
       }
@@ -402,8 +402,8 @@
         {"speaker": "broadcast", "text": "전산 오류 발생. 모든 전자 장비가 정지됩니다."},
         {"sfx": "정전"},
         {"filter": ["정전"]},
-        {"enter": "genesis"},
-        {"speaker": "genesis", "text": "무대 장치도, 문도 열리지 않습니다. 시간이 없는데…"},
+        {"enter": "genesis", "outfit": {"genesis": "uniform"}},
+        {"speaker": "genesis", "text": "무대 장치도, 문도 열리지 않습니다. 시간이 없는데…", "expression": "jealous"},
         {"enter": "avante", "outfit": {"avante": "mechanic"}},
         {"lamp": {"avante": "빨강"}},
         {"sfx": "N 배기음 팡팡"},
@@ -415,18 +415,18 @@
         {"speaker": "pony", "text": "이봐요, 해 봤어요? 안 되면 될 때까지!"},
         {"sfx": "철컥 철컥 철컥"},
         {"filter": []},
-        {"speaker": "genesis", "text": "…리허설, 살았군요."},
-        {"speaker": "genesis", "text": "품질은 약속이라고 했죠. 당신은 약속을 지키는 차입니다."}
+        {"speaker": "genesis", "text": "…리허설, 살았군요.", "expression": "neutral"},
+        {"speaker": "genesis", "text": "품질은 약속이라고 했죠. 당신은 약속을 지키는 차입니다.", "expression": "handshake"}
       ],
       "choice": {
         "options": [
           { "text": "\"팀장님 약속도 지켜 주세요. 행사, 꼭 성공시켜요.\"", "affection": {"genesis": 1}, "vars": {"good": 1}, "next": "g4",
               "lines": [
-                {"speaker": "genesis", "text": "약속하죠."}
+                {"speaker": "genesis", "text": "약속하죠.", "expression": "holdhand"}
               ] },
           { "text": "\"저 오늘 대박이었죠? 보너스 주세요!\"", "next": "g4",
               "lines": [
-                {"speaker": "genesis", "text": "수리비에서 제하겠습니다."}
+                {"speaker": "genesis", "text": "수리비에서 제하겠습니다.", "expression": "jealous"}
               ] }
         ]
       }
@@ -436,7 +436,7 @@
         {"bg": "04_event_stage"},
         {"filter": ["밤"]},
         {"text": "그리고 30일째 밤. 포니 50주년 행사."},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"speaker": "genesis", "text": "1976년, 에콰도르로 떠난 포니 6대가 시작이었습니다."},
         {"card": "c04"},
         {"speaker": "genesis", "text": "이제 우리는 세계 세 번째 자동차 그룹입니다."},
@@ -451,10 +451,10 @@
         {"lamp": {"ioniq5": "회색"}},
         {"speaker": "ioniq5", "text": "남은 전기, 다 드릴게요. 음향은 제가 살릴게요.", "expression": "happy"},
         {"sfx": "박수"},
-        {"speaker": "genesis", "text": "…행사는 성공입니다. 당신 덕분에."},
+        {"speaker": "genesis", "text": "…행사는 성공입니다. 당신 덕분에.", "expression": "happy"},
         {"sfx": "천둥"},
-        {"speaker": "genesis", "text": "다음 벼락이 오고 있습니다. 가야 합니다, 포니."},
-        {"speaker": "genesis", "text": "당신이 남으면 나는 사라집니다. 그런데도… 가지 말라고 하고 싶군요."}
+        {"speaker": "genesis", "text": "다음 벼락이 오고 있습니다. 가야 합니다, 포니.", "expression": "sad"},
+        {"speaker": "genesis", "text": "당신이 남으면 나는 사라집니다. 그런데도… 가지 말라고 하고 싶군요.", "expression": "holdhand"}
       ],
       "choice": {
         "options": [
@@ -473,10 +473,10 @@
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
         {"text": "그리고 2026년, 헤리티지 박물관."},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"lamp": {"genesis": "분홍"}},
-        {"speaker": "genesis", "text": "회장이 되었습니다. 약속대로요."},
-        {"speaker": "genesis", "text": "1975년의 당신이 없었다면, 이 그룹도, 나도 없었습니다."},
+        {"speaker": "genesis", "text": "회장이 되었습니다. 약속대로요.", "expression": "happy"},
+        {"speaker": "genesis", "text": "1975년의 당신이 없었다면, 이 그룹도, 나도 없었습니다.", "expression": "confess"},
         {"sfx": "비상등 깜빡 깜빡"},
         {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
       ],
@@ -488,8 +488,8 @@
         {"sfx": "벼락"},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
-        {"enter": "genesis"},
-        {"speaker": "genesis", "text": "좋은 신입이었습니다. 그뿐입니다."},
+        {"enter": "genesis", "outfit": {"genesis": "suit"}},
+        {"speaker": "genesis", "text": "좋은 신입이었습니다. 그뿐입니다.", "expression": "sad"},
         {"text": "박물관의 포니는 끝내 깜빡이지 않았다."}
       ],
       "next": "epilogue"
@@ -695,7 +695,7 @@
         {"speaker": "broadcast", "text": "전산 오류 발생. 모든 전자 장비가 정지됩니다."},
         {"sfx": "정전"},
         {"filter": ["정전"]},
-        {"enter": "genesis"},
+        {"enter": "genesis", "outfit": {"genesis": "uniform"}},
         {"speaker": "genesis", "text": "문도, 무대 장치도 멈췄습니다. 누가 백업 장비를 가져와야 하는데…"},
         {"exit": "genesis"},
         {"enter": "avante", "outfit": {"avante": "mechanic"}},
