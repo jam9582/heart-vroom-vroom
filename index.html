@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a1428">
-  <title>드라이브 하트</title>
+  <title>심장이 부릉부릉</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
@@ -14,7 +14,12 @@
   <div id="game">
     <!-- 게임 화면 -->
     <div id="bg"></div>
+    <div id="bg-overlay"></div>
+    <div id="rain"></div>
     <div id="stage"></div>
+    <div id="flash"></div>
+    <div id="sfx"></div>
+    <div id="cards"></div>
 
     <div id="hud">
       <button id="hud-toggle" type="button" aria-label="호감도 표시 전환">♥</button>
@@ -23,7 +28,7 @@
     <div id="toasts"></div>
 
     <div id="dialog">
-      <div id="nameplate"></div>
+      <div id="nameplate"><i class="lamp-dot"></i><span id="nameplate-name"></span></div>
       <div id="text"></div>
       <div id="next-indicator">▼</div>
       <div id="menu">
@@ -45,6 +50,7 @@
         <div id="ending-title"></div>
         <div id="ending-subtitle"></div>
         <div id="ending-scores"></div>
+        <div id="ending-cards"></div>
         <button id="restart" class="btn-primary" type="button">처음부터</button>
       </div>
     </div>
@@ -61,13 +67,25 @@
     <div id="title-screen" class="layer is-open">
       <div class="road"></div>
       <div class="title-inner">
-        <div id="title-logo">드라이브 하트</div>
+        <h1 id="title-logo"><img id="title-logo-img" alt="심장이 부릉부릉"><span id="title-logo-text">심장이 부릉부릉</span></h1>
         <div id="title-sub"></div>
-        <div id="title-cast"></div>
         <div class="title-buttons">
           <button type="button" class="btn-primary" data-action="start">시작하기</button>
           <button type="button" class="btn-ghost" data-action="album">엔딩 앨범</button>
         </div>
+      </div>
+    </div>
+
+    <!-- 공략 대상 선택 -->
+    <div id="select" class="layer">
+      <div class="select-inner">
+        <div class="select-head">
+          <button type="button" class="select-back" data-action="back">‹ 타이틀</button>
+          <div id="select-title"></div>
+        </div>
+        <div id="select-list"></div>
+        <div id="select-quote"></div>
+        <button id="select-go" type="button" class="btn-primary" data-action="go" disabled>이 사람으로 시작</button>
       </div>
     </div>
 

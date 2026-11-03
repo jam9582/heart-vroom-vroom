@@ -1,4 +1,4 @@
-# 드라이브 하트
+# 심장이 부릉부릉
 
 1. 이 폴더에서 `python3 -m http.server 8000` 실행
 2. 브라우저에서 http://localhost:8000 접속

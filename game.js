@@ -1,13 +1,14 @@
 /*
- * 드라이브 하트 — 비주얼 노벨 엔진
- * 스토리·대사·선택지·호감도·엔딩은 전부 story.json에 있습니다.
+ * 심장이 부릉부릉 — 비주얼 노벨 엔진
+ * 스토리·대사·선택지·호감도·엔딩·연출은 전부 story.json에 있습니다.
  * 이 파일은 story.json을 읽어서 화면에 그려주기만 합니다.
  */
 (() => {
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const ALBUM_KEY = 'driveheart.endings';
+  const ENDINGS_KEY = 'heartvroom.endings';
+  const CARDS_KEY = 'heartvroom.cards';
   const FADE_MS = 350;
 
   let story = null;
@@ -19,30 +20,80 @@
   // ---------- 상태 ----------
   function newState() {
     const aff = {};
-    for (const id of Object.keys(story.characters)) aff[id] = story.affection?.initial ?? 0;
-    return { sceneId: null, lineIndex: 0, affection: aff, onStage: [], bg: null,
-             waiting: false, auto: false, log: [], endingChar: null };
+    for (const id of targetIds()) aff[id] = story.affection?.initial ?? 0;
+    return {
+      sceneId: null, lines: [], index: -1, done: null,
+      affection: aff, vars: {}, onStage: [], lamps: {}, filters: [], bg: null,
+      cards: [], ending: null, waiting: false, auto: false, log: [], route: null,
+    };
   }
 
-  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400 }, story.settings);
-  const fillVars = (s) => String(s ?? '').replace(/\{player\}/g, story.meta?.playerName || '나');
+  const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true }, story.settings);
+  const targetIds = () => Object.keys(story.characters).filter((id) => story.characters[id].target);
+  const maxAffection = () => story.affection?.max ?? 5;
+
+  // 조건 { "avante": 2 } → 호감도(또는 vars 점수)가 2 이상이면 참
+  function check(cond = {}) {
+    return Object.entries(cond).every(([k, v]) => (state.affection[k] ?? state.vars[k] ?? 0) >= v);
+  }
+  function resolveNext(next) {
+    if (next && typeof next === 'object') return check(next.if) ? next.then : next.else;
+    return next;
+  }
 
   // ---------- 장면 진행 ----------
-  function goto(sceneId) {
-    if (sceneId === 'ENDING') sceneId = pickEnding();
+  function goto(target) {
+    const sceneId = resolveNext(target);
     const scene = story.scenes[sceneId];
     if (!scene) return fatal(`story.json에 "${sceneId}" 장면이 없습니다.`);
+    state.sceneId = sceneId;
+    const lines = scene.background ? [{ bg: scene.background }, ...(scene.lines || [])] : (scene.lines || []);
+    playLines(lines, () => endOfScene(scene));
+  }
 
-    const enter = () => {
-      state.sceneId = sceneId;
-      state.lineIndex = 0;
-      state.onStage = scene.characters || [];
-      setBackground(scene.background);
-      showLine();
-    };
-    // 배경이 바뀌면 암전 전환
-    if (scene.background !== state.bg && state.bg !== null) transition(enter);
-    else enter();
+  function playLines(lines, done) {
+    state.lines = lines;
+    state.index = -1;
+    state.done = done;
+    step();
+  }
+
+  // 다음 줄 실행. 명령만 있는 줄은 실행하고 바로 다음 줄로, 대사가 있으면 멈춰서 클릭을 기다림
+  function step() {
+    for (;;) {
+      state.index++;
+      const line = state.lines[state.index];
+      if (!line) return state.done();
+
+      if (line.bg !== undefined && line.bg !== state.bg && state.bg !== null && !busy) {
+        // 배경이 바뀌면 암전 → 교체 → 이어서 진행
+        return transition(() => { setBackground(line.bg); if (!runLine(line)) step(); });
+      }
+      if (line.bg !== undefined) setBackground(line.bg);
+      if (runLine(line)) return;
+    }
+  }
+
+  // 명령을 실행하고, 대사가 있으면 화면에 띄우고 true 반환
+  function runLine(line) {
+    let stageChanged = false;
+    if (line.filter !== undefined) setFilters(line.filter);
+    if (line.flash) flash();
+    if (line.exit) { state.onStage = state.onStage.filter((id) => id !== line.exit); stageChanged = true; }
+    if (line.enter && !state.onStage.includes(line.enter)) { state.onStage.push(line.enter); stageChanged = true; }
+    if (line.lamp) { Object.assign(state.lamps, line.lamp); stageChanged = true; }
+    if (line.sfx) playSfx(line.sfx);
+    if (line.card) getCard(line.card);
+    if (line.affection) applyAffection(line.affection);
+    if (line.vars) addVars(line.vars);
+    if (line.ending) state.ending = line.ending;
+
+    if (line.text === undefined) {
+      if (stageChanged) renderStage(null);
+      return false;
+    }
+    showText(line);
+    return true;
   }
 
   function transition(mid) {
@@ -55,22 +106,22 @@
     }, FADE_MS);
   }
 
-  function showLine() {
-    const scene = story.scenes[state.sceneId];
-    const line = (scene.lines || [])[state.lineIndex];
-    if (!line) return endOfScene(scene);
-
-    if (line.show) state.onStage = line.show;
-    renderStage(line.speaker, line.expression);
-
+  function showText(line) {
     const ch = story.characters[line.speaker];
+    const onStage = state.onStage.includes(line.speaker);
+    renderStage(onStage ? line.speaker : null, line.expression);
+
     const plate = $('nameplate');
     plate.classList.toggle('show', !!ch);
-    plate.textContent = ch ? ch.name : '';
+    $('nameplate-name').textContent = ch ? ch.name : '';
+    const lamp = story.lamps?.[state.lamps[line.speaker]];
+    plate.classList.toggle('has-lamp', !!lamp);
+    plate.style.setProperty('--lamp', lamp?.color || 'transparent');
     $('dialog').style.setProperty('--speaker', ch ? ch.color : 'rgba(255,255,255,.35)');
     $('dialog').classList.toggle('narration', !ch);
 
-    const text = fillVars(line.text);
+    const text = String(line.text ?? '');
+    $('text').classList.toggle('thought', /^\(.*\)$/s.test(text.trim()));
     state.log.push({ name: ch?.name, color: ch?.color, text });
     typeText(text);
   }
@@ -103,32 +154,33 @@
   }
 
   function advance() {
-    if (busy || state.waiting || !state.sceneId) return;
+    if (busy || state?.waiting || !state?.sceneId) return;
     if (typing) return finishTyping(typing.text);   // 첫 클릭은 문장 완성
-    state.lineIndex++;
-    showLine();
+    step();
   }
 
   function endOfScene(scene) {
-    if (scene.ending) return showEnding(scene);
+    if (scene.showEnding) return showEnding();
+    if (scene.choice?.routeChoice && state.route) return goto(state.route.start);
     if (scene.choice) return showChoice(scene.choice);
     if (scene.next) return goto(scene.next);
-    fatal(`"${state.sceneId}" 장면에 choice, next, ending 중 아무것도 없습니다.`);
+    fatal(`"${state.sceneId}" 장면에 choice, next, showEnding 중 아무것도 없습니다.`);
   }
 
   // ---------- 선택지 ----------
   function showChoice(choice) {
     state.waiting = true;
     clearTimeout(autoTimer);
-    $('choice-prompt').textContent = fillVars(choice.prompt);
+    $('choice-prompt').textContent = choice.prompt || '';
+    $('choice-prompt').hidden = !choice.prompt;
     const list = $('choice-list');
     list.innerHTML = '';
-    (choice.options || []).forEach((opt, i) => {
+    (choice.options || []).filter((o) => !o.require || check(o.require)).forEach((opt, i) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'choice';
+      b.className = 'choice' + (opt.require ? ' secret' : '');
       b.innerHTML = `<span class="choice-no">${i + 1}</span><span class="choice-text"></span>`;
-      b.querySelector('.choice-text').textContent = fillVars(opt.text);
+      b.querySelector('.choice-text').textContent = opt.text;
       b.style.animationDelay = `${i * 70}ms`;
       b.onclick = () => pickOption(opt);
       list.appendChild(b);
@@ -140,76 +192,125 @@
     if (!state.waiting) return;
     open('choices', false);
     state.waiting = false;
-    state.log.push({ choice: true, text: fillVars(opt.text) });
-    applyAffection(opt.affection);
-    goto(opt.next);
+    state.log.push({ choice: true, text: opt.text });
+    if (opt.affection) applyAffection(opt.affection);
+    if (opt.vars) addVars(opt.vars);
+    if (opt.lines?.length) playLines(opt.lines, () => goto(opt.next));
+    else goto(opt.next);
   }
 
-  function applyAffection(delta = {}) {
-    const max = story.affection?.max ?? 10;
+  function applyAffection(delta) {
     for (const [id, d] of Object.entries(delta)) {
       if (!(id in state.affection) || !d) continue;
-      state.affection[id] = Math.max(0, Math.min(max, state.affection[id] + d));
+      state.affection[id] = Math.max(0, Math.min(maxAffection(), state.affection[id] + d));
       if (story.affection?.showChangeToast !== false) toast(id, d);
     }
     renderHud();
   }
 
-  // 호감도가 가장 높은 캐릭터 (동점이면 story.json characters 순서상 앞쪽)
-  function pickEnding() {
-    const rule = story.endings || {};
-    let best = null;
-    for (const id of Object.keys(story.characters)) {
-      if (!rule.happy?.[id]) continue;
-      if (best === null || state.affection[id] > state.affection[best]) best = id;
+  function addVars(delta) {
+    for (const [k, d] of Object.entries(delta)) state.vars[k] = (state.vars[k] || 0) + d;
+  }
+
+  // ---------- 연출 ----------
+  function setBackground(bgId) {
+    state.bg = bgId;
+    const bg = story.backgrounds?.[bgId] || {};
+    const layers = [];
+    if (bg.image) layers.push(`url("${bg.image}")`);   // 파일이 없으면 이 층만 투명 → 그라데이션이 보임
+    layers.push(bg.gradient || 'linear-gradient(180deg, #2a2340, #120e1c)');
+    $('bg').style.backgroundImage = layers.join(', ');
+    // 배경이 바뀌면 필터와 등장인물 초기화
+    setFilters([]);
+    state.onStage = [];
+    renderStage(null);
+  }
+
+  function setFilters(names) {
+    state.filters = [].concat(names || []);
+    const defs = state.filters.map((n) => story.filters?.[n]).filter(Boolean);
+    $('bg').style.filter = defs.map((d) => d.css).filter(Boolean).join(' ');
+    $('bg-overlay').style.background = defs.filter((d) => d.overlay)
+      .map((d) => `linear-gradient(${d.overlay}, ${d.overlay})`).join(', ') || 'none';
+    $('rain').classList.toggle('on', defs.some((d) => d.rain));
+  }
+
+  function flash() {
+    const f = $('flash');
+    f.classList.remove('on');
+    void f.offsetWidth;   // 애니메이션 다시 시작
+    f.classList.add('on');
+    $('game').classList.remove('shake');
+    void $('game').offsetWidth;
+    $('game').classList.add('shake');
+  }
+
+  function playSfx(name) {
+    const src = story.sounds?.[name];
+    if (src) {
+      try { new Audio(src).play().catch(() => {}); } catch { /* 소리 실패는 무시 */ }
     }
-    if (best !== null && state.affection[best] >= (rule.threshold ?? 0)) {
-      state.endingChar = best;
-      return rule.happy[best];
-    }
-    state.endingChar = null;
-    return rule.normal;
+    if (!settings().showSfxText) return;
+    const el = document.createElement('div');
+    el.className = 'sfx';
+    el.textContent = name;
+    $('sfx').appendChild(el);
+    setTimeout(() => el.remove(), 1600);
+  }
+
+  function getCard(id) {
+    const card = story.cards?.[id];
+    if (!card) return;
+    if (!state.cards.includes(id)) state.cards.push(id);
+    const owned = loadList(CARDS_KEY);
+    const isNew = !owned.includes(id);
+    if (isNew) saveList(CARDS_KEY, id);
+
+    const el = document.createElement('div');
+    el.className = 'card-pop';
+    el.innerHTML = `<div class="card-label">연대기 카드${isNew ? ' <b>NEW</b>' : ''}</div><div class="card-year"></div><div class="card-text"></div>`;
+    el.querySelector('.card-year').textContent = card.year;
+    el.querySelector('.card-text').textContent = card.text;
+    $('cards').appendChild(el);
+    setTimeout(() => el.remove(), 3400);
   }
 
   // ---------- 엔딩 ----------
-  function showEnding(scene) {
+  function showEnding() {
     state.waiting = true;
     state.auto = false;
     syncAutoButton();
-    const ending = scene.ending;
-    const ch = story.characters[ending.character || state.endingChar];
-    const happy = ending.type !== 'normal';
+    const ending = story.endings?.[state.ending] || { type: 'normal', title: '엔딩' };
+    const ch = story.characters[ending.character];
+    const type = ending.type || 'normal';
+    const accent = { happy: ch?.color || '#ff6b8b', normal: '#9aa4c7', bad: '#6b2d3a' }[type] || '#9aa4c7';
 
     const card = document.querySelector('.ending-card');
-    card.style.setProperty('--accent', happy && ch ? ch.color : '#9aa4c7');
-    $('ending-badge').textContent = happy ? 'HAPPY END' : 'NORMAL END';
-    $('ending-title').textContent = fillVars(ending.title);
-    $('ending-subtitle').textContent = fillVars(ending.subtitle);
+    card.style.setProperty('--accent', accent);
+    $('ending-badge').textContent = `${type.toUpperCase()} END`;
+    $('ending-title').textContent = ending.title || '';
+    $('ending-subtitle').textContent = ending.subtitle || '';
+    $('ending-cards').textContent = `연대기 카드 ${state.cards.length} / ${Object.keys(story.cards || {}).length}`;
 
-    const max = story.affection?.max ?? 10;
     $('ending-scores').innerHTML = '';
-    for (const [id, c] of Object.entries(story.characters)) {
-      const row = document.createElement('div');
-      row.className = 'score-row';
-      row.style.setProperty('--c', c.color);
-      row.innerHTML = `<span class="score-name"></span><span class="bar"><i style="width:${state.affection[id] / max * 100}%"></i></span><b>${state.affection[id]}</b>`;
-      row.querySelector('.score-name').textContent = c.name;
-      $('ending-scores').appendChild(row);
-    }
+    for (const id of targetIds()) $('ending-scores').appendChild(heartRow(id, 'score-row'));
 
-    saveEnding(state.sceneId);
+    if (state.ending) saveList(ENDINGS_KEY, state.ending);
     setTimeout(() => open('ending', true), 400);
   }
 
-  function startGame() {
+  function startGame(sceneId, route = null) {
     open('ending', false);
     open('title-screen', false);
+    open('select', false);
     clearTimeout(autoTimer);
     state = newState();
+    state.route = route;
     syncAutoButton();
+    setFilters([]);
     $('stage').innerHTML = '';
     renderHud();
-    goto(story.meta.start);
+    goto(typeof sceneId === 'string' ? sceneId : story.meta.start);
   }
 
   function toTitle() {
@@ -224,15 +325,6 @@
   }
 
   // ---------- 화면 그리기 ----------
-  function setBackground(bgId) {
-    state.bg = bgId ?? null;
-    const bg = story.backgrounds?.[bgId] || {};
-    const layers = [];
-    if (bg.image) layers.push(`url("${bg.image}")`);   // 파일이 없으면 이 층만 투명 → 그라데이션이 보임
-    layers.push(bg.gradient || 'linear-gradient(180deg, #2a2340, #120e1c)');
-    $('bg').style.backgroundImage = layers.join(', ');
-  }
-
   // 무대 위 캐릭터를 id별로 유지해서, 표정만 바뀔 때 깜빡이지 않게 함
   function renderStage(speaker, expression) {
     const stage = $('stage');
@@ -247,12 +339,16 @@
       if (!el) el = createChar(id);
       el.style.order = order;
       el.classList.toggle('speaking', speaker === id);
-      el.classList.toggle('dim', !!speaker && speaker !== id && !!story.characters[speaker]);
+      el.classList.toggle('dim', !!speaker && speaker !== id);
+      const lamp = story.lamps?.[state.lamps[id]];
+      el.style.setProperty('--lamp', lamp?.color || '#fffbe6');
+      el.classList.toggle('has-lamp', !!lamp);
+      el.classList.toggle('faded', !!lamp?.fade);
       const ch = story.characters[id];
       const want = (speaker === id && expression && ch.images?.[expression]) ||
                    (speaker === id ? null : el.dataset.src) || ch.images?.default || '';
       setCharImage(el, want, ch.images?.default);
-      stage.appendChild(el);
+      if (el.parentNode !== stage) stage.appendChild(el);
     });
   }
 
@@ -291,18 +387,25 @@
     img.src = src;
   }
 
+  function heartRow(id, cls) {
+    const ch = story.characters[id];
+    const v = state ? state.affection[id] ?? 0 : 0;
+    const row = document.createElement('div');
+    row.className = cls;
+    row.dataset.id = id;
+    row.style.setProperty('--c', ch.color);
+    const hearts = Array.from({ length: maxAffection() }, (_, i) => `<i class="${i < v ? 'on' : ''}">♥</i>`).join('');
+    row.innerHTML = `<span class="hud-name"></span><span class="hearts">${hearts}</span>`;
+    row.querySelector('.hud-name').textContent = ch.name;
+    return row;
+  }
+
   function renderHud() {
-    const max = story.affection?.max ?? 10;
     const list = $('hud-list');
     list.innerHTML = '';
-    for (const [id, ch] of Object.entries(story.characters)) {
-      const v = state ? state.affection[id] : 0;
-      const row = document.createElement('div');
-      row.className = 'hud-row';
-      row.dataset.id = id;
-      row.style.setProperty('--c', ch.color);
-      row.innerHTML = `<span class="heart">♥</span><span class="hud-name"></span><span class="bar"><i style="width:${v / max * 100}%"></i></span><b>${v}</b>`;
-      row.querySelector('.hud-name').textContent = ch.name;
+    for (const id of targetIds()) {
+      const row = heartRow(id, 'hud-row');
+      row.classList.toggle('chosen', state?.route?.character === id);
       list.appendChild(row);
     }
   }
@@ -344,42 +447,96 @@
   }
 
   function renderAlbum() {
-    const seen = loadEndings();
     const list = $('album-list');
     list.innerHTML = '';
-    for (const [sid, sc] of Object.entries(story.scenes)) {
-      if (!sc.ending) continue;
-      const got = seen.includes(sid);
-      const charId = sc.ending.character ||
-        Object.keys(story.endings?.happy || {}).find((k) => story.endings.happy[k] === sid);
-      const color = story.characters[charId]?.color || '#9aa4c7';
+    const section = (title, got, total) => {
+      const h = document.createElement('div');
+      h.className = 'album-count';
+      h.innerHTML = `<b></b> <span>${got} / ${total}</span>`;
+      h.querySelector('b').textContent = title;
+      list.appendChild(h);
+    };
+
+    const seenEndings = loadList(ENDINGS_KEY);
+    const endings = Object.entries(story.endings || {});
+    section('엔딩', endings.filter(([id]) => seenEndings.includes(id)).length, endings.length);
+    for (const [id, e] of endings) {
+      const got = seenEndings.includes(id);
       const item = document.createElement('div');
       item.className = 'album-item' + (got ? '' : ' locked');
-      item.style.setProperty('--c', color);
+      item.style.setProperty('--c', story.characters[e.character]?.color || (e.type === 'bad' ? '#8a3a4a' : '#9aa4c7'));
       item.innerHTML = `<span class="album-type"></span><span class="album-title"></span>`;
-      item.querySelector('.album-type').textContent = sc.ending.type === 'normal' ? 'NORMAL' : 'HAPPY';
-      item.querySelector('.album-title').textContent = got ? fillVars(sc.ending.title) : '???';
+      item.querySelector('.album-type').textContent = (e.type || 'normal').toUpperCase();
+      item.querySelector('.album-title').textContent = got ? e.title : '???';
       list.appendChild(item);
     }
-    const total = list.children.length;
-    const head = document.createElement('div');
-    head.className = 'album-count';
-    head.textContent = `달성 ${seen.filter((s) => story.scenes[s]?.ending).length} / ${total}`;
-    list.prepend(head);
+
+    const owned = loadList(CARDS_KEY);
+    const cards = Object.entries(story.cards || {});
+    section('연대기 카드', cards.filter(([id]) => owned.includes(id)).length, cards.length);
+    const grid = document.createElement('div');
+    grid.className = 'card-grid';
+    for (const [id, c] of cards) {
+      const got = owned.includes(id);
+      const el = document.createElement('div');
+      el.className = 'card-mini' + (got ? '' : ' locked');
+      el.innerHTML = '<div class="card-year"></div><div class="card-text"></div>';
+      el.querySelector('.card-year').textContent = got ? c.year : '????';
+      el.querySelector('.card-text').textContent = got ? c.text : '아직 모으지 못한 카드';
+      grid.appendChild(el);
+    }
+    list.appendChild(grid);
   }
 
   function renderTitle() {
-    $('title-logo').textContent = story.meta?.title || '';
+    const title = story.meta?.title || '';
+    $('title-logo-text').textContent = title;
     $('title-sub').textContent = story.meta?.subtitle || '';
-    document.title = story.meta?.title || document.title;
-    const cast = $('title-cast');
-    cast.innerHTML = '';
-    for (const ch of Object.values(story.characters)) {
-      const s = document.createElement('span');
-      s.style.setProperty('--c', ch.color);
-      s.textContent = ch.name;
-      cast.appendChild(s);
-    }
+    document.title = title || document.title;
+    const img = $('title-logo-img');
+    img.alt = title;
+    img.onload = () => $('title-logo').classList.add('has-image');
+    img.onerror = () => $('title-logo').classList.remove('has-image');
+    if (story.meta?.logo) img.src = story.meta.logo;
+  }
+
+  // ---------- 공략 대상 선택 ----------
+  let picked = null;
+
+  function openSelect() {
+    const routes = story.routes?.list || [];
+    if (!routes.length) return startGame();
+    picked = null;
+    $('select-title').textContent = story.routes.title || '';
+    $('select-quote').textContent = '';
+    $('select-go').disabled = true;
+    const list = $('select-list');
+    list.innerHTML = '';
+    list.dataset.count = routes.length;
+    routes.forEach((r) => {
+      const ch = story.characters[r.character];
+      if (!ch) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pick';
+      b.style.setProperty('--c', ch.color);
+      b.innerHTML = '<div class="pick-art"></div><div class="pick-name"></div><div class="pick-title"></div>';
+      const art = createChar(r.character);
+      setCharImage(art, ch.images?.default || '', null);
+      b.querySelector('.pick-art').appendChild(art);
+      b.querySelector('.pick-name').textContent = ch.name;
+      b.querySelector('.pick-title').textContent = ch.title || '';
+      b.onclick = () => {
+        picked = r;
+        for (const el of list.children) el.classList.toggle('selected', el === b);
+        $('select-quote').textContent = r.quote ? `“${r.quote}”` : '';
+        $('select-quote').style.setProperty('--c', ch.color);
+        $('select-go').disabled = false;
+      };
+      list.appendChild(b);
+    });
+    open('ending', false);
+    open('select', true);
   }
 
   // ---------- 보조 ----------
@@ -395,14 +552,21 @@
     document.querySelector('[data-action="auto"]').classList.toggle('active', !!state?.auto);
   }
 
-  function loadEndings() {
-    try { return JSON.parse(localStorage.getItem(ALBUM_KEY)) || []; } catch { return []; }
+  function loadList(key) {
+    try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
   }
-  function saveEnding(sid) {
+  function saveList(key, id) {
     try {
-      const seen = loadEndings();
-      if (!seen.includes(sid)) localStorage.setItem(ALBUM_KEY, JSON.stringify([...seen, sid]));
+      const list = loadList(key);
+      if (!list.includes(id)) localStorage.setItem(key, JSON.stringify([...list, id]));
     } catch { /* 저장 불가 환경에서는 무시 */ }
+  }
+
+  // 배경 이미지를 미리 받아 두어 장면 전환 때 깜빡임 줄이기
+  function preloadBackgrounds() {
+    for (const bg of Object.values(story.backgrounds || {})) {
+      if (bg.image) new Image().src = bg.image;
+    }
   }
 
   function fatal(msg) {
@@ -417,22 +581,35 @@
   // 팀원이 story.json을 고쳤을 때 실수를 콘솔에 알려줌
   function validate() {
     const warn = (m) => console.warn('[story.json] ' + m);
-    const has = (sid) => sid === 'ENDING' || story.scenes[sid];
+    const chars = story.characters;
+    const sceneOk = (n) => (n && typeof n === 'object') ? sceneOk(n.then) && sceneOk(n.else) : !!story.scenes[n];
+    const checkLine = (where, l) => {
+      if (l.speaker && !chars[l.speaker]) warn(`${where}: speaker "${l.speaker}"가 characters에 없습니다.`);
+      for (const k of ['enter', 'exit']) if (l[k] && !chars[l[k]]) warn(`${where}: ${k} "${l[k]}"가 characters에 없습니다.`);
+      if (l.bg && !story.backgrounds?.[l.bg]) warn(`${where}: 배경 "${l.bg}"가 backgrounds에 없습니다.`);
+      for (const f of [].concat(l.filter || [])) if (!story.filters?.[f]) warn(`${where}: 필터 "${f}"가 filters에 없습니다.`);
+      for (const [c, color] of Object.entries(l.lamp || {})) {
+        if (!chars[c]) warn(`${where}: 램프 캐릭터 "${c}"가 없습니다.`);
+        if (!story.lamps?.[color]) warn(`${where}: 램프 색 "${color}"가 lamps에 없습니다.`);
+      }
+      if (l.card && !story.cards?.[l.card]) warn(`${where}: 카드 "${l.card}"가 cards에 없습니다.`);
+      if (l.ending && !story.endings?.[l.ending]) warn(`${where}: 엔딩 "${l.ending}"이 endings에 없습니다.`);
+    };
+    for (const r of story.routes?.list || []) {
+      if (!chars[r.character]) warn(`routes: 캐릭터 "${r.character}"가 characters에 없습니다.`);
+      if (!story.scenes[r.start]) warn(`routes: 시작 장면 "${r.start}"이 없습니다.`);
+    }
     if (!story.scenes[story.meta?.start]) warn(`meta.start "${story.meta?.start}" 장면이 없습니다.`);
     for (const [sid, sc] of Object.entries(story.scenes)) {
-      if (sc.next && !has(sc.next)) warn(`${sid}.next → "${sc.next}" 장면이 없습니다.`);
+      (sc.lines || []).forEach((l, i) => checkLine(`${sid} ${i + 1}번째 줄`, l));
+      if (sc.next && !sceneOk(sc.next)) warn(`${sid}.next가 없는 장면을 가리킵니다.`);
+      if (!sc.next && !sc.choice && !sc.showEnding) warn(`${sid}: next, choice, showEnding 중 하나가 필요합니다.`);
       (sc.choice?.options || []).forEach((o, i) => {
-        if (!has(o.next)) warn(`${sid} 선택지 ${i + 1}의 next → "${o.next}" 장면이 없습니다.`);
-        for (const k of Object.keys(o.affection || {})) {
-          if (!story.characters[k]) warn(`${sid} 선택지 ${i + 1}: 캐릭터 "${k}"가 characters에 없습니다.`);
-        }
+        const where = `${sid} 선택지 ${i + 1}`;
+        if (!sceneOk(o.next)) warn(`${where}의 next가 없는 장면을 가리킵니다.`);
+        for (const k of Object.keys(o.affection || {})) if (!chars[k]?.target) warn(`${where}: "${k}"는 공략 대상(target)이 아닙니다.`);
+        (o.lines || []).forEach((l, j) => checkLine(`${where} 반응 ${j + 1}번째 줄`, l));
       });
-      for (const l of sc.lines || []) {
-        if (l.speaker && !story.characters[l.speaker]) warn(`${sid}: speaker "${l.speaker}"가 characters에 없습니다.`);
-      }
-    }
-    for (const sid of [...Object.values(story.endings?.happy || {}), story.endings?.normal]) {
-      if (sid && !story.scenes[sid]) warn(`endings → "${sid}" 장면이 없습니다.`);
     }
   }
 
@@ -443,7 +620,9 @@
       const btn = e.target.closest('button');
       if (btn) {
         const a = btn.dataset.action;
-        if (a === 'start') startGame();
+        if (a === 'start') openSelect();
+        else if (a === 'go') { if (picked) startGame(null, picked); }
+        else if (a === 'back') open('select', false);
         else if (a === 'album') { renderAlbum(); open('album', true); }
         else if (a === 'log') { renderLog(); open('log', true); }
         else if (a === 'auto') toggleAuto();
@@ -459,13 +638,13 @@
       advance();
     });
 
-    $('restart').addEventListener('click', startGame);
+    $('restart').addEventListener('click', openSelect);
     $('hud-toggle').addEventListener('click', () => $('hud').classList.toggle('collapsed'));
 
     document.addEventListener('keydown', (e) => {
       const modal = document.querySelector('.modal.is-open');
       if (e.key === 'Escape' && modal) return modal.classList.remove('is-open');
-      if (modal || $('title-screen').classList.contains('is-open')) return;
+      if (modal || $('title-screen').classList.contains('is-open') || $('select').classList.contains('is-open')) return;
       if (state?.waiting && /^[1-9]$/.test(e.key)) {
         const b = $('choice-list').children[+e.key - 1];
         if (b && $('choices').classList.contains('is-open')) b.click();
@@ -490,6 +669,10 @@
     validate();
     renderTitle();
     bindInput();
+    preloadBackgrounds();
+    // 테스트용: 주소 끝에 #scene=p2 를 붙이면 그 장면부터 바로 시작
+    const jump = decodeURIComponent(location.hash).match(/scene=([^&]+)/);
+    if (jump) startGame(jump[1]);
   }
 
   boot();
