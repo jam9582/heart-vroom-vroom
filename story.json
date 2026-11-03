@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "title": "드라이브 하트",
+    "subtitle": "~ 너와 달리는 계절 ~",
+    "start": "s1",
+    "playerName": "나"
+  },
+
+  "settings": {
+    "textSpeed": 28,
+    "autoDelay": 1400
+  },
+
+  "affection": {
+    "initial": 0,
+    "max": 12,
+    "showChangeToast": true
+  },
+
+  "characters": {
+    "avante": {
+      "name": "아반떼",
+      "title": "준중형 · 활발한 후배",
+      "color": "#ff7aa2",
+      "images": { "default": "assets/characters/avante/avante.png", "smile": "assets/characters/avante/avante_smile.png" }
+    },
+    "pony": {
+      "name": "포니",
+      "title": "클래식 · 당당한 원조",
+      "color": "#d9483b",
+      "images": { "default": "assets/characters/pony/pony.png" }
+    },
+    "genesis": {
+      "name": "제네시스",
+      "title": "럭셔리 · 차가운 신사",
+      "color": "#8c8fa8",
+      "images": { "default": "assets/characters/genesis/genesis.png" }
+    },
+    "ionic": {
+      "name": "아이오닉",
+      "title": "전기차 · 수수께끼의 전학생",
+      "color": "#2ec4b6",
+      "images": { "default": "assets/characters/ionic/ionic.png" }
+    }
+  },
+
+  "backgrounds": {
+    "street":   { "image": "assets/bg_street.jpg",   "gradient": "linear-gradient(180deg, #ffd6a5 0%, #ffadad 45%, #6d597a 100%)" },
+    "garage":   { "image": "assets/bg_garage.jpg",   "gradient": "linear-gradient(160deg, #2b2d42 0%, #5c677d 60%, #8d99ae 100%)" },
+    "highway":  { "image": "assets/bg_highway.jpg",  "gradient": "linear-gradient(180deg, #a2d2ff 0%, #bde0fe 50%, #cdb4db 100%)" },
+    "seaside":  { "image": "assets/bg_seaside.jpg",  "gradient": "linear-gradient(180deg, #ffafcc 0%, #ffc8dd 35%, #48cae4 70%, #0077b6 100%)" },
+    "night":    { "image": "assets/bg_night.jpg",    "gradient": "linear-gradient(180deg, #0b132b 0%, #1c2541 50%, #3a506b 100%)" },
+    "ending":   { "image": "assets/bg_ending.jpg",   "gradient": "linear-gradient(180deg, #fff1e6 0%, #fde2e4 50%, #e2ece9 100%)" }
+  },
+
+  "scenes": {
+    "s1": {
+      "background": "street",
+      "characters": [],
+      "lines": [
+        { "text": "[샘플] 장면 1. 여기는 프롤로그 내레이션입니다." },
+        { "text": "[샘플] 대사창을 클릭하거나 스페이스바를 누르면 다음 줄로 넘어갑니다." },
+        { "speaker": "avante", "show": ["avante"], "text": "[샘플] 아반떼의 첫 대사입니다." },
+        { "speaker": "pony", "show": ["avante", "pony"], "text": "[샘플] 포니의 첫 대사입니다." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 첫 번째 선택지",
+        "options": [
+          { "text": "[샘플] 아반떼에게 말을 건다", "affection": { "avante": 2 }, "next": "s2" },
+          { "text": "[샘플] 포니에게 말을 건다", "affection": { "pony": 2 }, "next": "s2" },
+          { "text": "[샘플] 둘 다 무시한다", "affection": { "avante": -1, "pony": -1 }, "next": "s2" }
+        ]
+      }
+    },
+
+    "s2": {
+      "background": "garage",
+      "characters": ["genesis"],
+      "lines": [
+        { "text": "[샘플] 장면 2. 정비소로 장소가 바뀌었습니다." },
+        { "speaker": "genesis", "text": "[샘플] 제네시스의 첫 대사입니다." },
+        { "speaker": "genesis", "expression": "default", "text": "[샘플] 표정(expression)은 images에 등록한 이름으로 바꿀 수 있습니다." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 두 번째 선택지",
+        "options": [
+          { "text": "[샘플] 제네시스에게 조언을 구한다", "affection": { "genesis": 2 }, "next": "s3" },
+          { "text": "[샘플] 혼자 해결하겠다고 한다", "affection": { "genesis": -1, "avante": 1 }, "next": "s3" }
+        ]
+      }
+    },
+
+    "s3": {
+      "background": "highway",
+      "characters": ["ionic"],
+      "lines": [
+        { "text": "[샘플] 장면 3. 고속도로 위." },
+        { "speaker": "ionic", "text": "[샘플] 아이오닉의 첫 대사입니다." },
+        { "speaker": null, "text": "[샘플] speaker를 비우면 내레이션이 됩니다." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 세 번째 선택지",
+        "options": [
+          { "text": "[샘플] 아이오닉와 나란히 달린다", "affection": { "ionic": 2 }, "next": "s4" },
+          { "text": "[샘플] 포니에게 연락한다", "affection": { "pony": 1, "ionic": -1 }, "next": "s4" },
+          { "text": "[샘플] 아반떼를 떠올린다", "affection": { "avante": 1 }, "next": "s4" }
+        ]
+      }
+    },
+
+    "s4": {
+      "background": "seaside",
+      "characters": ["avante", "pony"],
+      "lines": [
+        { "text": "[샘플] 장면 4. 바닷가 드라이브." },
+        { "speaker": "avante", "expression": "smile", "text": "[샘플] 아반떼 웃는 표정 (avante_smile.png가 없으면 기본 실루엣)." },
+        { "speaker": "pony", "text": "[샘플] 포니의 대사입니다." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 네 번째 선택지",
+        "options": [
+          { "text": "[샘플] 아반떼 편을 든다", "affection": { "avante": 2, "pony": -1 }, "next": "s5" },
+          { "text": "[샘플] 포니 편을 든다", "affection": { "pony": 2, "avante": -1 }, "next": "s5" },
+          { "text": "[샘플] 중재한다", "affection": { "avante": 1, "pony": 1 }, "next": "s5" }
+        ]
+      }
+    },
+
+    "s5": {
+      "background": "night",
+      "characters": ["genesis", "ionic"],
+      "lines": [
+        { "text": "[샘플] 장면 5. 밤의 주차장." },
+        { "speaker": "genesis", "text": "[샘플] 제네시스의 대사입니다." },
+        { "speaker": "ionic", "text": "[샘플] 아이오닉의 대사입니다." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 다섯 번째 선택지",
+        "options": [
+          { "text": "[샘플] 제네시스와 야경을 본다", "affection": { "genesis": 2 }, "next": "s6" },
+          { "text": "[샘플] 아이오닉와 충전소에 간다", "affection": { "ionic": 2 }, "next": "s6" }
+        ]
+      }
+    },
+
+    "s6": {
+      "background": "street",
+      "characters": ["avante", "pony", "genesis", "ionic"],
+      "lines": [
+        { "text": "[샘플] 장면 6. 마지막 날, 모두가 모였습니다." },
+        { "speaker": "avante", "text": "[샘플] 아반떼." },
+        { "speaker": "pony", "text": "[샘플] 포니." },
+        { "speaker": "genesis", "text": "[샘플] 제네시스." },
+        { "speaker": "ionic", "text": "[샘플] 아이오닉." }
+      ],
+      "choice": {
+        "prompt": "[샘플] 마지막 선택지 — 누구에게 갈까?",
+        "options": [
+          { "text": "[샘플] 아반떼에게", "affection": { "avante": 3 }, "next": "ENDING" },
+          { "text": "[샘플] 포니에게", "affection": { "pony": 3 }, "next": "ENDING" },
+          { "text": "[샘플] 제네시스에게", "affection": { "genesis": 3 }, "next": "ENDING" },
+          { "text": "[샘플] 아이오닉에게", "affection": { "ionic": 3 }, "next": "ENDING" },
+          { "text": "[샘플] 아무도 고르지 않는다", "affection": { "avante": -2, "pony": -2, "genesis": -2, "ionic": -2 }, "next": "ENDING" }
+        ]
+      }
+    },
+
+    "end_avante": {
+      "background": "ending",
+      "characters": ["avante"],
+      "lines": [
+        { "speaker": "avante", "expression": "smile", "text": "[샘플] 아반떼 해피 엔딩 대사입니다." }
+      ],
+      "ending": { "type": "happy", "title": "아반떼 엔딩", "subtitle": "[샘플] 엔딩 부제" }
+    },
+    "end_pony": {
+      "background": "ending",
+      "characters": ["pony"],
+      "lines": [
+        { "speaker": "pony", "text": "[샘플] 포니 해피 엔딩 대사입니다." }
+      ],
+      "ending": { "type": "happy", "title": "포니 엔딩", "subtitle": "[샘플] 엔딩 부제" }
+    },
+    "end_genesis": {
+      "background": "ending",
+      "characters": ["genesis"],
+      "lines": [
+        { "speaker": "genesis", "text": "[샘플] 제네시스 해피 엔딩 대사입니다." }
+      ],
+      "ending": { "type": "happy", "title": "제네시스 엔딩", "subtitle": "[샘플] 엔딩 부제" }
+    },
+    "end_ionic": {
+      "background": "ending",
+      "characters": ["ionic"],
+      "lines": [
+        { "speaker": "ionic", "text": "[샘플] 아이오닉 해피 엔딩 대사입니다." }
+      ],
+      "ending": { "type": "happy", "title": "아이오닉 엔딩", "subtitle": "[샘플] 엔딩 부제" }
+    },
+    "end_normal": {
+      "background": "night",
+      "characters": [],
+      "lines": [
+        { "text": "[샘플] 노멀 엔딩. 아무와도 가까워지지 못했습니다." }
+      ],
+      "ending": { "type": "normal", "title": "노멀 엔딩", "subtitle": "[샘플] 혼자 달리는 길" }
+    }
+  },
+
+  "endings": {
+    "threshold": 5,
+    "happy": {
+      "avante": "end_avante",
+      "pony": "end_pony",
+      "genesis": "end_genesis",
+      "ionic": "end_ionic"
+    },
+    "normal": "end_normal"
+  }
+}
