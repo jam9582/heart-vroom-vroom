@@ -30,6 +30,8 @@
 
   const settings = () => Object.assign({ textSpeed: 28, autoDelay: 1400, showSfxText: true, musicVolume: 0.5, sfxVolume: 0.8 }, story.settings);
   const targetIds = () => Object.keys(story.characters).filter((id) => story.characters[id].target);
+  // 공략 대상을 골랐으면 그 캐릭터만 호감도를 관리
+  const activeTargets = () => state?.route ? [state.route.character] : targetIds();
   const maxAffection = () => story.affection?.max ?? 5;
 
   // 조건 { "avante": 2 } → 호감도(또는 vars 점수)가 2 이상이면 참
@@ -188,7 +190,9 @@
     $('choice-prompt').hidden = !choice.prompt;
     const list = $('choice-list');
     list.innerHTML = '';
-    (choice.options || []).filter((o) => !o.require || check(o.require)).forEach((opt, i) => {
+    // 공략 중인 캐릭터 전용 선택지(byRoute)가 있으면 그것을 사용
+    const options = (state.route && choice.byRoute?.[state.route.character]) || choice.options || [];
+    options.filter((o) => !o.require || check(o.require)).forEach((opt, i) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'choice' + (opt.require ? ' secret' : '');
@@ -215,7 +219,7 @@
 
   function applyAffection(delta) {
     for (const [id, d] of Object.entries(delta)) {
-      if (!(id in state.affection) || !d) continue;
+      if (!(id in state.affection) || !d || !activeTargets().includes(id)) continue;
       state.affection[id] = Math.max(0, Math.min(maxAffection(), state.affection[id] + d));
       if (story.affection?.showChangeToast !== false) toast(id, d);
     }
@@ -286,7 +290,7 @@
     el.querySelector('.card-year').textContent = card.year;
     el.querySelector('.card-text').textContent = card.text;
     $('cards').appendChild(el);
-    setTimeout(() => el.remove(), 3400);
+    setTimeout(() => el.remove(), 2600);
   }
 
   // ---------- 엔딩 ----------
@@ -307,7 +311,7 @@
     $('ending-cards').textContent = `연대기 카드 ${state.cards.length} / ${Object.keys(story.cards || {}).length}`;
 
     $('ending-scores').innerHTML = '';
-    for (const id of targetIds()) $('ending-scores').appendChild(heartRow(id, 'score-row'));
+    for (const id of activeTargets()) $('ending-scores').appendChild(heartRow(id, 'score-row'));
 
     if (state.ending) saveList(ENDINGS_KEY, state.ending);
     setTimeout(() => open('ending', true), 400);
@@ -434,7 +438,7 @@
   function renderHud() {
     const list = $('hud-list');
     list.innerHTML = '';
-    for (const id of targetIds()) {
+    for (const id of activeTargets()) {
       const row = heartRow(id, 'hud-row');
       row.classList.toggle('chosen', state?.route?.character === id);
       list.appendChild(row);
@@ -722,7 +726,9 @@
       (sc.lines || []).forEach((l, i) => checkLine(`${sid} ${i + 1}번째 줄`, l));
       if (sc.next && !sceneOk(sc.next)) warn(`${sid}.next가 없는 장면을 가리킵니다.`);
       if (!sc.next && !sc.choice && !sc.showEnding) warn(`${sid}: next, choice, showEnding 중 하나가 필요합니다.`);
-      (sc.choice?.options || []).forEach((o, i) => {
+      const allOptions = [...(sc.choice?.options || []), ...Object.values(sc.choice?.byRoute || {}).flat()];
+      for (const r of Object.keys(sc.choice?.byRoute || {})) if (!chars[r]) warn(`${sid}: byRoute 캐릭터 "${r}"가 없습니다.`);
+      allOptions.forEach((o, i) => {
         const where = `${sid} 선택지 ${i + 1}`;
         if (!sceneOk(o.next)) warn(`${where}의 next가 없는 장면을 가리킵니다.`);
         for (const k of Object.keys(o.affection || {})) if (!chars[k]?.target) warn(`${where}: "${k}"는 공략 대상(target)이 아닙니다.`);

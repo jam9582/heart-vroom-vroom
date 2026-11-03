@@ -14,6 +14,7 @@
     "선택지": "choice.options 하나에 text, affection(호감도), vars(숨은 점수), lines(고른 뒤 반응 대사), next, require(보이는 조건)",
     "조건": "require와 next의 if는 { \"avante\": 2 }처럼 쓰고, 값 이상이면 참입니다. 캐릭터 id면 호감도, 아니면 vars 점수",
     "공략 대상 선택": "routes.list 순서대로 선택 화면에 나옵니다. 고른 대상은 start 장면으로 가고, \"routeChoice\": true 인 선택지는 건너뜁니다",
+    "캐릭터별 선택지": "choice.byRoute에 캐릭터 id별로 선택지를 적으면, 그 캐릭터를 공략 중일 때는 options 대신 그 선택지가 나옵니다. 없으면 options 그대로",
     "조건 이동": "\"next\": { \"if\": { \"good\": 2 }, \"then\": \"g_happy\", \"else\": \"g_normal\" }"
   },
   "meta": {
@@ -44,7 +45,7 @@
     "avante": {"name": "아반떼", "title": "동기", "color": "#f2994a", "target": true, "outfit": "suit", "images": {"default": "assets/characters/avante/suit_neutral.png", "casual_neutral": "assets/characters/avante/casual_neutral.png", "casual_happy": "assets/characters/avante/casual_happy.png", "casual_shy": "assets/characters/avante/casual_shy.png", "casual_sad": "assets/characters/avante/casual_sad.png", "casual_jealous": "assets/characters/avante/casual_jealous.png", "casual_handshake": "assets/characters/avante/casual_handshake.png", "casual_holdhand": "assets/characters/avante/casual_holdhand.png", "casual_drink": "assets/characters/avante/casual_drink.png", "casual_eat": "assets/characters/avante/casual_eat.png", "casual_confess": "assets/characters/avante/casual_confess.png", "casual_marry": "assets/characters/avante/casual_marry.png", "mechanic_neutral": "assets/characters/avante/mechanic_neutral.png", "mechanic_happy": "assets/characters/avante/mechanic_happy.png", "mechanic_shy": "assets/characters/avante/mechanic_shy.png", "mechanic_sad": "assets/characters/avante/mechanic_sad.png", "mechanic_jealous": "assets/characters/avante/mechanic_jealous.png", "mechanic_handshake": "assets/characters/avante/mechanic_handshake.png", "mechanic_holdhand": "assets/characters/avante/mechanic_holdhand.png", "mechanic_drink": "assets/characters/avante/mechanic_drink.png", "mechanic_eat": "assets/characters/avante/mechanic_eat.png", "mechanic_confess": "assets/characters/avante/mechanic_confess.png", "mechanic_marry": "assets/characters/avante/mechanic_marry.png", "suit_neutral": "assets/characters/avante/suit_neutral.png", "suit_happy": "assets/characters/avante/suit_happy.png", "suit_shy": "assets/characters/avante/suit_shy.png", "suit_sad": "assets/characters/avante/suit_sad.png", "suit_jealous": "assets/characters/avante/suit_jealous.png", "suit_handshake": "assets/characters/avante/suit_handshake.png", "suit_holdhand": "assets/characters/avante/suit_holdhand.png", "suit_drink": "assets/characters/avante/suit_drink.png", "suit_eat": "assets/characters/avante/suit_eat.png", "suit_confess": "assets/characters/avante/suit_confess.png", "suit_marry": "assets/characters/avante/suit_marry.png"}},
     "genesis": {"name": "제네시스", "title": "행사 총괄 팀장", "color": "#9aa0b8", "target": true, "images": {"default": "assets/characters/genesis/genesis.png"}},
     "palisade": {"name": "팰리세이드", "title": "옆 팀장", "color": "#4caf7a", "target": true, "outfit": "casual", "images": {"default": "assets/characters/palisade/casual_neutral.png", "casual_confess": "assets/characters/palisade/casual_confess.png", "casual_drink": "assets/characters/palisade/casual_drink.png", "casual_eat": "assets/characters/palisade/casual_eat.png", "casual_handshake": "assets/characters/palisade/casual_handshake.png", "casual_happy": "assets/characters/palisade/casual_happy.png", "casual_holdhand": "assets/characters/palisade/casual_holdhand.png", "casual_jealous": "assets/characters/palisade/casual_jealous.png", "casual_marry": "assets/characters/palisade/casual_marry.png", "casual_neutral": "assets/characters/palisade/casual_neutral.png", "casual_sad": "assets/characters/palisade/casual_sad.png", "casual_shy": "assets/characters/palisade/casual_shy.png", "mechanic_confess": "assets/characters/palisade/mechanic_confess.png", "mechanic_drink": "assets/characters/palisade/mechanic_drink.png", "suit_neutral": "assets/characters/palisade/suit_neutral.png"}},
-    "ioniq5": {"name": "아이오닉 5", "title": "사수", "color": "#2ec4b6", "target": true, "images": {"default": "assets/characters/ionic/ionic.png"}},
+    "ioniq5": {"name": "아이오닉 5", "title": "사수", "color": "#2ec4b6", "target": true, "images": {"default": "assets/characters/ionic/03_인사_커피.png", "neutral": "assets/characters/ionic/03_인사_커피.png", "shy": "assets/characters/ionic/01_쑥스러움.png", "jealous": "assets/characters/ionic/02_화남.png", "happy": "assets/characters/ionic/04_응원.png", "sad": "assets/characters/ionic/05_시무룩.png", "drink": "assets/characters/ionic/06_맥주.png", "eat": "assets/characters/ionic/07_식사.png", "handshake": "assets/characters/ionic/08_손내밀기.png", "holdhand": "assets/characters/ionic/09_손잡기.png", "confess": "assets/characters/ionic/10_꽃다발.png", "marry": "assets/characters/ionic/11_프러포즈.png"}},
     "broadcast": {"name": "방송", "color": "#6f7a8f"}
   },
   "routes": {
@@ -192,6 +193,30 @@
         {"exit": "genesis"}
       ],
       "choice": {
+        "byRoute": {
+          "palisade": [
+            { "text": "\"제가 밀어서라도 원래대로 해 놓을게요!\"", "affection": {"palisade": 1}, "next": "ch2",
+                "lines": [
+                  {"speaker": "genesis", "text": "(멀리서) …밀어서요? 범퍼를?"},
+                  {"text": "멀리서 지켜보던 덩치 큰 SUV 한 대가 크게 웃음을 터뜨렸다."}
+                ] },
+            { "text": "아반떼에게 \"우리 망했다…\"", "affection": {"avante": 1}, "next": "ch2",
+                "lines": [
+                  {"speaker": "avante", "text": "괜찮아, 무난하게 넘어가자."}
+                ] }
+          ],
+          "ioniq5": [
+            { "text": "\"죄송합니다! 제가 끝까지 책임질게요.\"", "affection": {"ioniq5": 1}, "next": "ch2",
+                "lines": [
+                  {"speaker": "genesis", "text": "(멀리서) …책임이라. 지켜보죠."},
+                  {"text": "충전기 옆에 서 있던 파란 전기차 한 대가 이쪽을 유심히 바라보았다."}
+                ] },
+            { "text": "아반떼에게 \"우리 망했다…\"", "affection": {"avante": 1}, "next": "ch2",
+                "lines": [
+                  {"speaker": "avante", "text": "괜찮아, 무난하게 넘어가자."}
+                ] }
+          ]
+        },
         "options": [
           { "text": "\"광택은 제가 직접 낼게요!\"", "affection": {"genesis": 1}, "next": "ch2",
               "lines": [
@@ -213,9 +238,9 @@
         {"lamp": {"ioniq5": "파랑"}},
         {"speaker": "ioniq5", "text": "신입이죠? 사수 아이오닉 5예요. 충전기 쓸래요?"},
         {"speaker": "pony", "text": "저… 휘발유차예요."},
-        {"speaker": "ioniq5", "text": "휘발유요? 요즘은 다 전기차, 수소차예요. 수소차는 우리가 2013년에 세계 최초로 양산했죠."},
+        {"speaker": "ioniq5", "text": "휘발유요? 요즘은 다 전기차, 수소차예요. 수소차는 우리가 2013년에 세계 최초로 양산했죠.", "expression": "happy"},
         {"card": "c09"},
-        {"speaker": "ioniq5", "text": "…그런데 우리 어디서 만난 적 있죠? 얼굴이 너무 익숙한데."},
+        {"speaker": "ioniq5", "text": "…그런데 우리 어디서 만난 적 있죠? 얼굴이 너무 익숙한데.", "expression": "shy"},
         {"exit": "ioniq5"},
         {"sfx": "경고등 삐빅"},
         {"speaker": "pony", "text": "(연료 경고등…! 언덕 한가운데서…)"},
@@ -230,6 +255,28 @@
         {"speaker": "palisade", "text": "힘이 부족하면 언제든 헬스장으로 와!", "expression": "happy"}
       ],
       "choice": {
+        "byRoute": {
+          "genesis": [
+            { "text": "제네시스 팀장님께 늦는다고 먼저 보고한다", "affection": {"genesis": 1}, "next": "ch3",
+                "lines": [
+                  {"speaker": "genesis", "text": "(전화) …보고가 빠르군요. 늦지 마십시오."}
+                ] },
+            { "text": "아껴 둔 휘발유 반 통을 내민다", "affection": {"palisade": 1}, "next": "ch3",
+                "lines": [
+                  {"speaker": "palisade", "text": "의리 있네! 마음만 받을게.", "expression": "happy"}
+                ] }
+          ],
+          "ioniq5": [
+            { "text": "아이오닉 5 선임님께 도움을 청하러 간다", "affection": {"ioniq5": 1}, "next": "ch3",
+                "lines": [
+                  {"speaker": "ioniq5", "text": "휘발유차는 저도 처음이라… 그래도 같이 찾아봐요."}
+                ] },
+            { "text": "아반떼와 싼 주유소를 찾아 나선다", "affection": {"avante": 1}, "next": "ch3",
+                "lines": [
+                  {"speaker": "avante", "text": "연비 운전은 내 전문이지."}
+                ] }
+          ]
+        },
         "options": [
           { "text": "아껴 둔 휘발유 반 통을 내민다", "affection": {"palisade": 1}, "next": "ch3",
               "lines": [
@@ -246,13 +293,13 @@
       "lines": [
         {"bg": "03_training_room"},
         {"enter": "ioniq5"},
-        {"speaker": "ioniq5", "text": "오늘은 회사 역사예요. 1967년 회사가 세워졌고, 처음엔 외국 차를 조립했어요."},
+        {"speaker": "ioniq5", "text": "오늘은 회사 역사예요. 1967년 회사가 세워졌고, 처음엔 외국 차를 조립했어요.", "expression": "handshake"},
         {"card": "c01"},
         {"speaker": "ioniq5", "text": "1976년, 한국 최초의 고유모델 '포니'가 나왔죠."},
         {"card": "c03"},
         {"lamp": {"pony": "노랑"}},
         {"speaker": "pony", "text": "(…나야?)"},
-        {"speaker": "ioniq5", "text": "1991년엔 처음으로 우리 엔진을 만들었고, 2022년엔 그룹이 세계 판매 3위가 됐어요."},
+        {"speaker": "ioniq5", "text": "1991년엔 처음으로 우리 엔진을 만들었고, 2022년엔 그룹이 세계 판매 3위가 됐어요.", "expression": "happy"},
         {"card": "c05"},
         {"card": "c13"},
         {"speaker": "pony", "text": "엔진을 직접…! 1975년엔 다들 꿈만 꿨는데."},
@@ -315,8 +362,8 @@
         {"text": "행사 자료를 찾으러 들어간 디자인 자료실."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "파랑"}},
-        {"speaker": "ioniq5", "text": "신입, 이거 봐요. 제 디자인의 뿌리래요."},
-        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠."},
+        {"speaker": "ioniq5", "text": "신입, 이거 봐요. 제 디자인의 뿌리래요.", "expression": "handshake"},
+        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠.", "expression": "happy"},
         {"card": "c14"},
         {"speaker": "pony", "text": "이건… 1974년 토리노에서 나랑 같이 공개된 차잖아."},
         {"enter": "genesis"},
@@ -327,7 +374,7 @@
         {"speaker": "genesis", "text": "당신이 돌아가지 않으면 첫 수출도, 우리 엔진도, 그 뒤의 우리도 없습니다."},
         {"sfx": "지직"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지."},
+        {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지.", "expression": "sad"},
         {"text": "아이오닉 5의 픽셀 램프가 하나, 꺼졌다."},
         {"speaker": "genesis", "text": "시작됐군요."},
         {"speaker": "pony", "text": "그럼 팀장님이 저한테 차갑게 굴었던 건…"},
@@ -402,7 +449,7 @@
         {"text": "포니의 헤드램프가 무대를 비췄다."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "남은 전기, 다 드릴게요. 음향은 제가 살릴게요."},
+        {"speaker": "ioniq5", "text": "남은 전기, 다 드릴게요. 음향은 제가 살릴게요.", "expression": "happy"},
         {"sfx": "박수"},
         {"speaker": "genesis", "text": "…행사는 성공입니다. 당신 덕분에."},
         {"sfx": "천둥"},
@@ -502,7 +549,7 @@
         {"speaker": "palisade", "text": "이래서 헬스를 하는 거야!", "expression": "happy"},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "고마워요… 근데 이상해요. 물 때문이 아니라, 제 몸이 자꾸 흐려져요."},
+        {"speaker": "ioniq5", "text": "고마워요… 근데 이상해요. 물 때문이 아니라, 제 몸이 자꾸 흐려져요.", "expression": "sad"},
         {"text": "아이오닉 5의 픽셀 램프가 하나둘 꺼져 가고 있었다."},
         {"speaker": "palisade", "text": "이게… 무슨 일이야?", "expression": "sad"},
         {"speaker": "pony", "text": "(이제 말해야 해.)"}
@@ -693,12 +740,12 @@
         {"speaker": "pony", "text": "내가 안 돌아가면 첫 수출도, 첫 엔진도, 국민차도… 너도 없어.", "expression": {"avante": "sad"}},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "그래서였구나. 제 램프가 꺼지는 거. 전 선배를 보고 태어났거든요."},
+        {"speaker": "ioniq5", "text": "그래서였구나. 제 램프가 꺼지는 거. 전 선배를 보고 태어났거든요.", "expression": "sad"},
         {"speaker": "ioniq5", "text": "1974년 포니 쿠페를 이어받아서, 2022년엔 세계 올해의 차까지 받았는데."},
         {"card": "c14"},
         {"lamp": {"avante": "회색"}},
         {"speaker": "avante", "text": "어…? 나도 흐려진다. N 램프가 안 켜져.", "expression": "sad"},
-        {"speaker": "ioniq5", "text": "선배가 돌아가야 제가 태어나요. 그러니까 꼭 가요."},
+        {"speaker": "ioniq5", "text": "선배가 돌아가야 제가 태어나요. 그러니까 꼭 가요.", "expression": "happy"},
         {"speaker": "avante", "text": "난 싫어. 겨우 특별해졌는데, 너 없이?", "expression": "jealous"}
       ],
       "choice": {
@@ -728,7 +775,7 @@
         {"text": "포니의 헤드램프가 무대를 밝혔다."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "음향은 제 남은 전기로…!"},
+        {"speaker": "ioniq5", "text": "음향은 제 남은 전기로…!", "expression": "happy"},
         {"sfx": "박수"},
         {"exit": "ioniq5"},
         {"sfx": "천둥"},
@@ -787,12 +834,12 @@
         {"lamp": {"ioniq5": "파랑"}},
         {"speaker": "ioniq5", "text": "신입, 오늘은 전시차 목록 정리예요. 끝나면 충전하고 가요."},
         {"speaker": "pony", "text": "선임님, 저는 충전 말고 주유를…"},
-        {"speaker": "ioniq5", "text": "아, 맞다. 휘발유. 아직도 적응이 안 되네요."},
-        {"speaker": "ioniq5", "text": "그럼 제 전기를 나눠 줄게요. 저는 차 밖으로도 전기를 꺼내 쓸 수 있거든요."},
+        {"speaker": "ioniq5", "text": "아, 맞다. 휘발유. 아직도 적응이 안 되네요.", "expression": "shy"},
+        {"speaker": "ioniq5", "text": "그럼 제 전기를 나눠 줄게요. 저는 차 밖으로도 전기를 꺼내 쓸 수 있거든요.", "expression": "handshake"},
         {"speaker": "pony", "text": "차가… 전기를 나눠 준다고요?"},
-        {"speaker": "ioniq5", "text": "캠핑 가면 전기밥솥도 돌려요. 오늘은 컵라면 물을 끓일 거예요."},
+        {"speaker": "ioniq5", "text": "캠핑 가면 전기밥솥도 돌려요. 오늘은 컵라면 물을 끓일 거예요.", "expression": "eat"},
         {"speaker": "pony", "text": "(1975년엔 기름 한 방울도 아꼈는데. 여긴 전기를 나눠 쓰는구나.)"},
-        {"speaker": "ioniq5", "text": "…그런데 신입, 진짜 어디서 본 것 같아요."},
+        {"speaker": "ioniq5", "text": "…그런데 신입, 진짜 어디서 본 것 같아요.", "expression": "shy"},
         {"lamp": {"ioniq5": "노랑"}},
         {"speaker": "ioniq5", "text": "아, 미안해요. 이상한 소리 했죠."}
       ],
@@ -801,11 +848,11 @@
           { "text": "\"저도 선임님이 처음 본 사람 같지 않아요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i2",
               "lines": [
                 {"lamp": {"ioniq5": "분홍"}},
-                {"speaker": "ioniq5", "text": "…그럼 우리, 진짜 어디서 만났나 봐요."}
+                {"speaker": "ioniq5", "text": "…그럼 우리, 진짜 어디서 만났나 봐요.", "expression": "shy"}
               ] },
           { "text": "\"흔한 얼굴이라 그래요.\"", "next": "i2",
               "lines": [
-                {"speaker": "ioniq5", "text": "그런가요? 흔한 얼굴은 아닌데."}
+                {"speaker": "ioniq5", "text": "그런가요? 흔한 얼굴은 아닌데.", "expression": "sad"}
               ] }
         ]
       }
@@ -817,14 +864,14 @@
         {"text": "전시 자료를 찾으러 들어간 디자인 자료실."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "파랑"}},
-        {"speaker": "ioniq5", "text": "찾았다. 이게 제 디자인의 뿌리예요."},
-        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠."},
+        {"speaker": "ioniq5", "text": "찾았다. 이게 제 디자인의 뿌리예요.", "expression": "handshake"},
+        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 콘셉트. 이걸 이어받아서 2022년 세계 올해의 차를 받았죠.", "expression": "happy"},
         {"card": "c14"},
         {"speaker": "pony", "text": "…이건 나랑 같이 토리노에 갔던 차잖아."},
-        {"speaker": "ioniq5", "text": "네? 신입이 그걸 어떻게…"},
+        {"speaker": "ioniq5", "text": "네? 신입이 그걸 어떻게…", "expression": "shy"},
         {"sfx": "지직"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지."},
+        {"speaker": "ioniq5", "text": "어…? 제 램프가 왜 이러지.", "expression": "sad"},
         {"text": "아이오닉 5의 픽셀 램프가 하나, 꺼졌다."},
         {"speaker": "pony", "text": "(나 때문이야. 내가 여기 있으면…)"}
       ],
@@ -832,11 +879,11 @@
         "options": [
           { "text": "\"사실 저, 1975년에서 왔어요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i3",
               "lines": [
-                {"speaker": "ioniq5", "text": "…그래서 익숙했구나. 제가 닮은 얼굴이 선배였어요."}
+                {"speaker": "ioniq5", "text": "…그래서 익숙했구나. 제가 닮은 얼굴이 선배였어요.", "expression": "shy"}
               ] },
           { "text": "\"고장 난 거예요. 정비소에 가 봐요.\"", "next": "i3",
               "lines": [
-                {"speaker": "ioniq5", "text": "…그렇겠죠. 내일 가 볼게요."}
+                {"speaker": "ioniq5", "text": "…그렇겠죠. 내일 가 볼게요.", "expression": "sad"}
               ] }
         ]
       }
@@ -849,22 +896,22 @@
         {"text": "며칠 뒤 밤, 아이오닉 5가 드라이브를 가자고 했다."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "배터리는 꽉 찼는데, 몸은 자꾸 흐려져요."},
+        {"speaker": "ioniq5", "text": "배터리는 꽉 찼는데, 몸은 자꾸 흐려져요.", "expression": "sad"},
         {"speaker": "ioniq5", "text": "선배가 돌아가야 포니가 출고되고, 그래야 제가 태어나요. 계산은 간단하죠."},
         {"speaker": "pony", "text": "그럼 선임님은요? 제가 돌아가면, 오늘 일은 기억해요?"},
         {"speaker": "ioniq5", "text": "모르겠어요. 다시 태어난 저는 오늘을 모를 수도 있어요."},
-        {"speaker": "ioniq5", "text": "그래도 괜찮아요. 제 디자인 안에 선배가 있으니까."}
+        {"speaker": "ioniq5", "text": "그래도 괜찮아요. 제 디자인 안에 선배가 있으니까.", "expression": "happy"}
       ],
       "choice": {
         "options": [
           { "text": "\"선임님이 잊어도, 제가 기억할게요.\"", "affection": {"ioniq5": 1}, "vars": {"good": 1}, "next": "i4",
               "lines": [
                 {"lamp": {"ioniq5": "분홍"}},
-                {"speaker": "ioniq5", "text": "…그럼 저는 그 기억을 닮아서 태어날게요."}
+                {"speaker": "ioniq5", "text": "…그럼 저는 그 기억을 닮아서 태어날게요.", "expression": "confess"}
               ] },
           { "text": "\"저도 잘 모르겠어요.\"", "next": "i4",
               "lines": [
-                {"speaker": "ioniq5", "text": "그렇죠. 저도요."}
+                {"speaker": "ioniq5", "text": "그렇죠. 저도요.", "expression": "sad"}
               ] }
         ]
       }
@@ -885,12 +932,12 @@
         {"text": "포니의 헤드램프가 무대를 밝혔다."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "회색"}},
-        {"speaker": "ioniq5", "text": "음향은 제가 맡을게요. 남은 전기, 전부 꺼내 쓸게요."},
+        {"speaker": "ioniq5", "text": "음향은 제가 맡을게요. 남은 전기, 전부 꺼내 쓸게요.", "expression": "happy"},
         {"sfx": "박수"},
         {"speaker": "ioniq5", "text": "거봐요. 전기는 나눠 쓰는 거라고 했죠."},
         {"sfx": "천둥"},
-        {"speaker": "ioniq5", "text": "다음 벼락이에요. 가요, 선배. 그래야 제가 태어나요."},
-        {"speaker": "ioniq5", "text": "…그래도 마지막으로 한 번만, 신입이라고 불러도 돼요?"}
+        {"speaker": "ioniq5", "text": "다음 벼락이에요. 가요, 선배. 그래야 제가 태어나요.", "expression": "handshake"},
+        {"speaker": "ioniq5", "text": "…그래도 마지막으로 한 번만, 신입이라고 불러도 돼요?", "expression": "shy"}
       ],
       "choice": {
         "options": [
@@ -903,7 +950,7 @@
       "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "ioniq5_happy"},
-        {"speaker": "ioniq5", "text": "신입. …다녀와요."},
+        {"speaker": "ioniq5", "text": "신입. …다녀와요.", "expression": "holdhand"},
         {"sfx": "벼락"},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
@@ -911,8 +958,8 @@
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "분홍"}},
-        {"speaker": "ioniq5", "text": "처음 와 보는 곳인데, 이상하게 익숙해요."},
-        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 사진 앞에 서면, 누가 저를 기억해 주는 기분이 들거든요."},
+        {"speaker": "ioniq5", "text": "처음 와 보는 곳인데, 이상하게 익숙해요.", "expression": "shy"},
+        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 사진 앞에 서면, 누가 저를 기억해 주는 기분이 들거든요.", "expression": "confess"},
         {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
       ],
       "next": "epilogue"
@@ -926,7 +973,7 @@
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "파랑"}},
-        {"speaker": "ioniq5", "text": "포니 50주년 전시… 사진 속 얼굴이 낯설지 않네."},
+        {"speaker": "ioniq5", "text": "포니 50주년 전시… 사진 속 얼굴이 낯설지 않네.", "expression": "sad"},
         {"text": "박물관의 포니는 끝내 깜빡이지 않았다."}
       ],
       "next": "epilogue"
@@ -954,8 +1001,8 @@
         {"bg": "05_heritage_museum"},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "파랑"}},
-        {"speaker": "ioniq5", "text": "램프가 다 돌아왔어요. 신기하죠."},
-        {"speaker": "ioniq5", "text": "…역시, 어디서 본 얼굴이었어."}
+        {"speaker": "ioniq5", "text": "램프가 다 돌아왔어요. 신기하죠.", "expression": "happy"},
+        {"speaker": "ioniq5", "text": "…역시, 어디서 본 얼굴이었어.", "expression": "shy"}
       ],
       "showEnding": true
     }
