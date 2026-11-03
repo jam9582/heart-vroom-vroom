@@ -137,15 +137,18 @@
     "c15": {"year": "현대차그룹", "text": "계열사가 함께 만드는 차"}
   },
   "endings": {
-    "genesis_happy": {"type": "happy", "title": "제네시스 해피 엔딩", "character": "genesis"},
-    "genesis_normal": {"type": "normal", "title": "제네시스 노멀 엔딩", "character": "genesis"},
-    "palisade_happy": {"type": "happy", "title": "팰리세이드 해피 엔딩", "character": "palisade"},
-    "palisade_normal": {"type": "normal", "title": "팰리세이드 노멀 엔딩", "character": "palisade"},
-    "avante_happy": {"type": "happy", "title": "아반떼 해피 엔딩", "character": "avante"},
-    "avante_normal": {"type": "normal", "title": "아반떼 노멀 엔딩", "character": "avante"},
-    "ioniq5_happy": {"type": "happy", "title": "아이오닉 5 해피 엔딩", "character": "ioniq5"},
-    "ioniq5_normal": {"type": "normal", "title": "아이오닉 5 노멀 엔딩", "character": "ioniq5"},
-    "bad": {"type": "bad", "title": "배드 엔딩"}
+    "genesis_happy": {"type": "happy", "title": "제네시스 해피 엔딩", "subtitle": "기원의 약속", "character": "genesis", "image": "assets/characters/genesis/f72de31f-62fc-4b62-8287-0d77e2e65913.png"},
+    "genesis_normal": {"type": "normal", "title": "제네시스 노멀 엔딩", "subtitle": "서랍 속 보증서", "character": "genesis", "image": "assets/characters/genesis/069c361a-7742-46be-8028-661c8e7c60ab.png"},
+    "genesis_bad": {"type": "bad", "title": "제네시스 배드 엔딩", "subtitle": "두 번의 깜빡임", "character": "genesis", "image": "assets/characters/genesis/5ea25751-0d95-405a-b0c9-a88c4f8a633a.png"},
+    "palisade_happy": {"type": "happy", "title": "팰리세이드 해피 엔딩", "subtitle": "비워 둔 조수석", "character": "palisade", "image": "assets/characters/palisade/casual_marry.png"},
+    "palisade_normal": {"type": "normal", "title": "팰리세이드 노멀 엔딩", "subtitle": "아직 비어 있는 자리", "character": "palisade", "image": "assets/characters/palisade/casual_sad.png"},
+    "palisade_bad": {"type": "bad", "title": "팰리세이드 배드 엔딩", "subtitle": "밀어 주지 못한 밤", "character": "palisade", "image": "assets/characters/palisade/casual_confess.png"},
+    "avante_happy": {"type": "happy", "title": "아반떼 해피 엔딩", "subtitle": "든든한 너에게", "character": "avante", "image": "assets/characters/avante/casual_marry.png"},
+    "avante_normal": {"type": "normal", "title": "아반떼 노멀 엔딩", "subtitle": "무난하게 삼킨 말", "character": "avante", "image": "assets/characters/avante/casual_sad.png"},
+    "avante_bad": {"type": "bad", "title": "아반떼 배드 엔딩", "subtitle": "특별해지고 싶었던 밤", "character": "avante", "image": "assets/characters/avante/suit_confess.png"},
+    "ioniq5_happy": {"type": "happy", "title": "아이오닉 5 해피 엔딩", "subtitle": "닮은 마음", "character": "ioniq5", "image": "assets/characters/ionic/11_프러포즈.png"},
+    "ioniq5_normal": {"type": "normal", "title": "아이오닉 5 노멀 엔딩", "subtitle": "아껴 둔 전기", "character": "ioniq5", "image": "assets/characters/ionic/05_시무룩.png"},
+    "ioniq5_bad": {"type": "bad", "title": "아이오닉 5 배드 엔딩", "subtitle": "가장 먼저 꺼진 램프", "character": "ioniq5", "image": "assets/characters/ionic/10_꽃다발.png"}
   },
   "scenes": {
     "prologue": {
@@ -460,16 +463,25 @@
       "choice": {
         "options": [
           {"text": "\"돌아갈게요. 팀장님이 있는 미래를 위해.\"", "next": {"if": {"good": 2}, "then": "g_happy", "else": "g_normal"}},
-          {"text": "\"남을래요.\"", "next": "bad"}
+          {"text": "\"남을래요.\"", "next": "g_bad"}
         ]
       }
     },
     "g_happy": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "genesis_happy"},
+        {"bgm": "Sweet Anticipation"},
+        {"speaker": "genesis", "text": "가기 전에, 하나만 말하겠습니다.", "expression": "shy"},
+        {"speaker": "genesis", "text": "범퍼에 부딪힌 그날부터… 아니, 그 전부터였는지도 모르겠군요.", "expression": "shy"},
+        {"lamp": {"genesis": "분홍"}},
+        {"speaker": "genesis", "text": "좋아합니다, 포니. 기원이라서가 아니라, 당신이라서.", "expression": "confess"},
+        {"speaker": "pony", "text": "…저도요, 팀장님. 꼭 다시 만나요.", "expression": "shy"},
+        {"speaker": "genesis", "text": "약속하죠. 품질은, 약속이니까.", "expression": "holdhand"},
         {"sfx": "비상등 깜빡 깜빡"},
         {"text": "마지막으로 본 건, 비상등을 두 번 깜빡이는 제네시스였다."},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
@@ -477,23 +489,54 @@
         {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"lamp": {"genesis": "분홍"}},
         {"speaker": "genesis", "text": "회장이 되었습니다. 약속대로요.", "expression": "happy"},
-        {"speaker": "genesis", "text": "1975년의 당신이 없었다면, 이 그룹도, 나도 없었습니다.", "expression": "confess"},
+        {"speaker": "genesis", "text": "1975년의 당신이 없었다면, 이 그룹도, 나도 없었습니다.", "expression": "neutral"},
+        {"speaker": "genesis", "text": "그러니 이번엔 제가 먼저 말하겠습니다.", "expression": "shy"},
+        {"speaker": "genesis", "text": "50년을 돌아서 왔습니다. …다시, 제 곁에 있어 주겠습니까?", "expression": "marry"},
         {"sfx": "비상등 깜빡 깜빡"},
-        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
+        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."},
+        {"speaker": "pony", "text": "(들려요, 팀장님. …네.)", "expression": "marry"}
       ],
-      "next": "epilogue"
+      "showEnding": true
     },
     "g_normal": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "genesis_normal"},
+        {"speaker": "genesis", "text": "…가십시오, 신입. 뒤돌아보지 말고.", "expression": "sad"},
+        {"text": "제네시스는 하려던 말을, 보증서처럼 서랍 깊숙이 넣어 두었다."},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "genesis", "outfit": {"genesis": "suit"}},
         {"speaker": "genesis", "text": "좋은 신입이었습니다. 그뿐입니다.", "expression": "sad"},
+        {"speaker": "genesis", "text": "…그뿐이라고, 몇 번을 말해야 믿어질까요."},
         {"text": "박물관의 포니는 끝내 깜빡이지 않았다."}
       ],
       "next": "epilogue"
+    },
+    "g_bad": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"ending": "genesis_bad"},
+        {"bgm": "포니 테마"},
+        {"speaker": "pony", "text": "남을래요. 팀장님 곁에 있을래요.", "expression": "shy"},
+        {"speaker": "genesis", "text": "…그 말이, 제일 듣고 싶었고 제일 듣기 싫었습니다.", "expression": "sad"},
+        {"sfx": "천둥 멀어짐"},
+        {"text": "벼락은 다른 곳에 떨어졌다."},
+        {"text": "다음 날 아이오닉 5가 사라졌다. 일주일 뒤에는 아반떼가. 그다음엔 팰리세이드가."},
+        {"lamp": {"genesis": "회색"}},
+        {"speaker": "genesis", "text": "사라지기 전에, 이 말만은 하겠습니다.", "expression": "sad"},
+        {"speaker": "genesis", "text": "좋아했습니다, 포니. 처음부터, 끝까지.", "expression": "confess"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"exit": "genesis"},
+        {"text": "마지막으로 제네시스가 비상등을 두 번 깜빡이고 사라졌다."},
+        {"bg": "02_hq_parking"},
+        {"filter": ["밤"]},
+        {"text": "텅 빈 주차장에, 1975년식 포니 혼자 남았다."},
+        {"speaker": "pony", "text": "(약속은… 내가 먼저 깼구나.)", "expression": "sad"}
+      ],
+      "showEnding": true
     },
     "p1": {
       "lines": [
@@ -610,7 +653,7 @@
         {"card": "c04"},
         {"sfx": "벼락"},
         {"filter": ["정전"]},
-        {"enter": "palisade", "outfit": {"palisade": "suit"}},
+        {"enter": "palisade", "outfit": {"palisade": "casual"}},
         {"speaker": "palisade", "text": "정전이다! 음향, 조명 전부 나갔어!"},
         {"speaker": "pony", "text": "제가 무대를 비출게요. 전자장치 없는 차, 여기 있습니다!", "expression": "happy"},
         {"sfx": "수동 시동 부르릉"},
@@ -624,40 +667,81 @@
       "choice": {
         "options": [
           {"text": "\"밀어 주세요, 팀장님.\"", "next": {"if": {"good": 2}, "then": "p_happy", "else": "p_normal"}},
-          {"text": "\"남을래요.\"", "next": "bad"}
+          {"text": "\"남을래요.\"", "next": "p_bad"}
         ]
       }
     },
     "p_happy": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "palisade_happy"},
-        {"speaker": "palisade", "text": "하나, 둘…"},
+        {"bgm": "Sweet Anticipation"},
+        {"speaker": "palisade", "text": "밀기 전에… 하나만 말하자.", "expression": "shy"},
+        {"speaker": "palisade", "text": "8인승인데, 조수석은 늘 비워 뒀어. 이상하지?", "expression": "shy"},
         {"lamp": {"palisade": "분홍"}},
-        {"speaker": "palisade", "text": "셋!"},
+        {"speaker": "palisade", "text": "이제 알겠다. 그 자리, 네 자리였어. 좋아한다, 포니.", "expression": "confess"},
+        {"speaker": "pony", "text": "…팀장님, 그거 반칙이에요. 이제 어떻게 가요.", "expression": "shy"},
+        {"speaker": "palisade", "text": "하나, 둘…", "expression": "holdhand"},
+        {"speaker": "palisade", "text": "셋!", "expression": "happy"},
         {"sfx": "밀어서 시동 부르릉"},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "palisade", "outfit": {"palisade": "casual"}},
+        {"lamp": {"palisade": "분홍"}},
         {"speaker": "palisade", "text": "자, 다들 모여! 단체 사진 찍자! 우리 팀 첫 번째 선배님이랑!", "expression": "happy"},
         {"sfx": "찰칵"},
-        {"text": "사진 속 포니의 비상등이, 두 번 깜빡였다."}
+        {"speaker": "palisade", "text": "…그리고 이건, 둘이서만.", "expression": "shy"},
+        {"speaker": "palisade", "text": "50년 늦었지만, 조수석 아직 비어 있어. 평생 타 줄래?", "expression": "marry"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"text": "사진 속 포니의 비상등이, 두 번 깜빡였다."},
+        {"speaker": "pony", "text": "(…네. 안전벨트, 꽉 맬게요.)", "expression": "marry"}
       ],
-      "next": "epilogue"
+      "showEnding": true
     },
     "p_normal": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "palisade_normal"},
+        {"speaker": "palisade", "text": "하나, 둘, 셋. …잘 가라, 신입.", "expression": "sad"},
+        {"text": "팰리세이드는 끝내 조수석 이야기를 꺼내지 않았다."},
+        {"sfx": "밀어서 시동 부르릉"},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "palisade", "outfit": {"palisade": "casual"}},
         {"speaker": "palisade", "text": "좋은 신입이었지. …가끔 보고 싶다.", "expression": "sad"},
+        {"speaker": "palisade", "text": "조수석은 아직 비워 두고 있는데."},
         {"text": "사진 속 포니는 그저 조용했다."}
       ],
       "next": "epilogue"
+    },
+    "p_bad": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"ending": "palisade_bad"},
+        {"bgm": "포니 테마"},
+        {"speaker": "pony", "text": "남을래요. 팀장님 팀에 계속 있을래요.", "expression": "shy"},
+        {"speaker": "palisade", "text": "…미는 건 자신 있는데, 붙잡는 건 처음이라 모르겠다.", "expression": "sad"},
+        {"sfx": "천둥 멀어짐"},
+        {"text": "벼락은 다른 곳에 떨어졌다."},
+        {"text": "다음 날 아이오닉 5가 사라졌다. 일주일 뒤에는 아반떼가. 그다음엔 제네시스가."},
+        {"lamp": {"palisade": "회색"}},
+        {"speaker": "palisade", "text": "포니. 조수석은 네 자리였어. 좋아했다.", "expression": "confess"},
+        {"speaker": "palisade", "text": "미안하다. 이번엔… 못 밀어 주겠네.", "expression": "sad"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"exit": "palisade"},
+        {"text": "마지막으로 팰리세이드가 비상등을 두 번 깜빡이고 사라졌다."},
+        {"bg": "02_hq_parking"},
+        {"filter": ["밤"]},
+        {"text": "텅 빈 주차장에, 1975년식 포니 혼자 남았다."},
+        {"speaker": "pony", "text": "(조수석이… 이렇게 넓은 거였구나.)", "expression": "sad"}
+      ],
+      "showEnding": true
     },
     "a1": {
       "lines": [
@@ -790,17 +874,25 @@
       "choice": {
         "options": [
           {"text": "\"같이 달려, 아반떼!\"", "next": {"if": {"good": 2}, "then": "a_happy", "else": "a_normal"}},
-          {"text": "\"남을래.\"", "next": "bad"}
+          {"text": "\"남을래.\"", "next": "a_bad"}
         ]
       }
     },
     "a_happy": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "avante_happy"},
+        {"bgm": "Sweet Anticipation"},
         {"sfx": "질주"},
+        {"speaker": "avante", "text": "다 왔어. 무대 한가운데.", "expression": "happy"},
+        {"lamp": {"avante": "분홍"}},
+        {"speaker": "avante", "text": "포니. 나, 이건 무난하게 말 못 하겠다.", "expression": "shy"},
+        {"speaker": "avante", "text": "좋아해. 특별하게 해 줘서가 아니라, 너라서.", "expression": "confess"},
+        {"speaker": "pony", "text": "…바보. 그걸 이제 말하면 어떡해.", "expression": "shy"},
         {"speaker": "avante", "text": "포니! 다음에 만나면 내가 선배다?", "expression": "happy"},
         {"speaker": "pony", "text": "무슨 소리야, 영원히 내가 선배야!", "expression": "happy"},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
@@ -809,21 +901,52 @@
         {"lamp": {"avante": "분홍"}},
         {"speaker": "avante", "text": "연수 첫날이랑 똑같네. 너 하나도 안 변했다.", "expression": "holdhand"},
         {"speaker": "avante", "text": "나 요즘은 '무난한' 대신 '든든한'이라고 불려.", "expression": "happy"},
-        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
+        {"speaker": "avante", "text": "그러니까 이번엔 내가 먼저 할게. 평생, 네 옆 차선 비워 둘게.", "expression": "marry"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."},
+        {"speaker": "pony", "text": "(…응. 그래도 영원히 내가 선배야.)", "expression": "marry"}
       ],
-      "next": "epilogue"
+      "showEnding": true
     },
     "a_normal": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "avante_normal"},
+        {"speaker": "avante", "text": "…가. 끝까지 데려다줄게.", "expression": "sad"},
+        {"text": "아반떼는 하려던 말을, 무난하게 삼켰다."},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "avante", "outfit": {"avante": "casual"}},
         {"speaker": "avante", "text": "그때 동기, 잘 지내려나.", "expression": "sad"},
+        {"speaker": "avante", "text": "…그때 말할걸."},
         {"text": "포니는 대답하지 않았다."}
       ],
       "next": "epilogue"
+    },
+    "a_bad": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
+      "lines": [
+        {"ending": "avante_bad"},
+        {"bgm": "포니 테마"},
+        {"speaker": "pony", "text": "남을래. 너랑 같이 있을래.", "expression": "shy"},
+        {"speaker": "avante", "text": "…진짜? 나 지금 엄청 기쁜데, 왜 이렇게 무섭지.", "expression": "sad"},
+        {"sfx": "천둥 멀어짐"},
+        {"text": "벼락은 다른 곳에 떨어졌다."},
+        {"text": "다음 날 아이오닉 5가 사라졌다. 일주일 뒤에는 팰리세이드가. 그다음엔 제네시스가."},
+        {"lamp": {"avante": "회색"}},
+        {"speaker": "avante", "text": "포니, 나 너 좋아했어. 무난하지 않게, 진짜로.", "expression": "confess"},
+        {"speaker": "avante", "text": "다음엔… 꼭 특별하게 만나자.", "expression": "sad"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"exit": "avante"},
+        {"text": "마지막으로 아반떼가 비상등을 두 번 깜빡이고 사라졌다."},
+        {"bg": "02_hq_parking"},
+        {"filter": ["밤"]},
+        {"text": "텅 빈 주차장에, 1975년식 포니 혼자 남았다."},
+        {"speaker": "pony", "text": "(특별해지고 싶었던 건… 나였나 봐.)", "expression": "sad"}
+      ],
+      "showEnding": true
     },
     "i1": {
       "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
@@ -943,16 +1066,23 @@
       "choice": {
         "options": [
           {"text": "\"돌아갈게요. 선임님이 태어날 미래를 위해.\"", "next": {"if": {"good": 2}, "then": "i_happy", "else": "i_normal"}},
-          {"text": "\"남을래요.\"", "next": "bad"}
+          {"text": "\"남을래요.\"", "next": "i_bad"}
         ]
       }
     },
     "i_happy": {
-      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "ioniq5_happy"},
+        {"bgm": "Sweet Anticipation"},
+        {"speaker": "ioniq5", "text": "신입, 마지막으로 하나만요.", "expression": "shy"},
+        {"speaker": "ioniq5", "text": "처음부터 익숙했던 이유, 이제 알아요. 저는 선배를 닮아서 태어났으니까.", "expression": "neutral"},
+        {"lamp": {"ioniq5": "분홍"}},
+        {"speaker": "ioniq5", "text": "그러니까 이 마음도, 아마 선배를 닮았을 거예요. 좋아해요.", "expression": "confess"},
+        {"speaker": "pony", "text": "그럼 꼭 태어나요. 제가 기다릴게요.", "expression": "shy"},
         {"speaker": "ioniq5", "text": "신입. …다녀와요.", "expression": "holdhand"},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "01_1975_factory"},
         {"text": "1975년 12월. 포니는 무사히 출고되었다."},
         {"bg": "05_heritage_museum"},
@@ -960,40 +1090,52 @@
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "분홍"}},
         {"speaker": "ioniq5", "text": "처음 와 보는 곳인데, 이상하게 익숙해요.", "expression": "shy"},
-        {"speaker": "ioniq5", "text": "1974년 포니 쿠페 사진 앞에 서면, 누가 저를 기억해 주는 기분이 들거든요.", "expression": "confess"},
-        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."}
+        {"speaker": "ioniq5", "text": "램프가 다 돌아왔어요. 그러니까 이번엔, 제가 먼저 말할게요.", "expression": "happy"},
+        {"speaker": "ioniq5", "text": "50년 전부터 좋아했어요, 선배. 이번엔 같이 달려요.", "expression": "marry"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"text": "전시된 포니의 비상등이, 두 번 깜빡였다."},
+        {"speaker": "pony", "text": "(…다녀왔어요, 선임님.)", "expression": "marry"}
       ],
-      "next": "epilogue"
+      "showEnding": true
     },
     "i_normal": {
-      "_note": "아이오닉 5 루트는 시나리오에 없어서 새로 쓴 초안입니다. 팀에서 검토해 주세요.",
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
         {"ending": "ioniq5_normal"},
+        {"speaker": "ioniq5", "text": "…다녀와요, 신입.", "expression": "sad"},
+        {"text": "아이오닉 5는 '좋아해요'라는 말을, 마지막 남은 전기처럼 아껴 두었다."},
         {"sfx": "벼락"},
+        {"flash": true},
         {"bg": "05_heritage_museum"},
         {"text": "2026년, 헤리티지 박물관."},
         {"enter": "ioniq5"},
         {"lamp": {"ioniq5": "파랑"}},
         {"speaker": "ioniq5", "text": "포니 50주년 전시… 사진 속 얼굴이 낯설지 않네.", "expression": "sad"},
+        {"speaker": "ioniq5", "text": "하고 싶은 말이 있었던 것 같은데. 뭐였더라."},
         {"text": "박물관의 포니는 끝내 깜빡이지 않았다."}
       ],
       "next": "epilogue"
     },
-    "bad": {
+    "i_bad": {
+      "_note": "엔딩을 미연시답게 고백 장면 중심으로 새로 쓴 초안입니다. 시나리오 원문 대사는 그대로 두고 사이에 추가했습니다. 팀에서 검토해 주세요.",
       "lines": [
+        {"ending": "ioniq5_bad"},
         {"bgm": "포니 테마"},
-        {"ending": "bad"},
-        {"bg": "04_event_stage"},
-        {"filter": ["밤"]},
-        {"speaker": "pony", "text": "남을래요. 다 같이 여기 있으면 되잖아요.", "expression": "sad"},
+        {"speaker": "pony", "text": "남을래요. 선임님이 사라지는 건 싫어요.", "expression": "sad"},
+        {"speaker": "ioniq5", "text": "…선배가 남으면, 제가 제일 먼저 사라져요. 알잖아요.", "expression": "sad"},
         {"sfx": "천둥 멀어짐"},
         {"text": "벼락은 다른 곳에 떨어졌다."},
-        {"text": "다음 날, 아이오닉 5가 사라졌다."},
-        {"text": "일주일 뒤에는 아반떼가. 그다음엔 팰리세이드가."},
+        {"lamp": {"ioniq5": "회색"}},
+        {"speaker": "ioniq5", "text": "그래도… 남아 줘서 고마워요. 좋아해요, 선배.", "expression": "confess"},
+        {"speaker": "ioniq5", "text": "다음엔 꼭, 제가 먼저 알아볼게요.", "expression": "sad"},
+        {"sfx": "비상등 깜빡 깜빡"},
+        {"exit": "ioniq5"},
+        {"text": "다음 날, 아이오닉 5가 가장 먼저 사라졌다. 일주일 뒤에는 아반떼가. 그다음엔 팰리세이드가."},
         {"text": "마지막으로 제네시스가 비상등을 두 번 깜빡이고 사라졌다."},
         {"bg": "02_hq_parking"},
         {"filter": ["밤"]},
-        {"text": "텅 빈 주차장에, 1975년식 포니 혼자 남았다."}
+        {"text": "텅 빈 주차장에, 1975년식 포니 혼자 남았다."},
+        {"speaker": "pony", "text": "(나를 닮은 차는, 이제 어디에도 없어.)", "expression": "sad"}
       ],
       "showEnding": true
     },

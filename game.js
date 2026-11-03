@@ -300,12 +300,23 @@
     state.auto = false;
     syncAutoButton();
     const ending = story.endings?.[state.ending] || { type: 'normal', title: '엔딩' };
-    const ch = story.characters[ending.character];
     const type = ending.type || 'normal';
-    const accent = { happy: ch?.color || '#ff6b8b', normal: '#9aa4c7', bad: '#6b2d3a' }[type] || '#9aa4c7';
+    const accent = { happy: '#ff6b9d', normal: '#9aa4c7', bad: '#6b2d3a' }[type] || '#9aa4c7';
 
     const card = document.querySelector('.ending-card');
     card.style.setProperty('--accent', accent);
+    // 엔딩 그림(캐릭터 고백·프러포즈 등)을 크게 걸고, 종류별 분위기 연출
+    const layer = $('ending');
+    layer.classList.remove('type-happy', 'type-normal', 'type-bad');
+    layer.classList.add(`type-${type}`);
+    layer.style.setProperty('--accent', accent);
+    layer.classList.toggle('has-art', !!ending.image);
+    if (ending.image) $('ending-img').src = ending.image;
+    else $('ending-img').removeAttribute('src');
+    const hearts = layer.querySelector('.ending-hearts');
+    hearts.innerHTML = type === 'happy'
+      ? Array.from({ length: 14 }, (_, i) => `<i style="left:${(i * 37) % 100}%;animation-delay:${(i * 0.45) % 5}s;font-size:${14 + (i * 7) % 18}px">♥</i>`).join('')
+      : '';
     $('ending-badge').textContent = `${type.toUpperCase()} END`;
     $('ending-title').textContent = ending.title || '';
     $('ending-subtitle').textContent = ending.subtitle || '';

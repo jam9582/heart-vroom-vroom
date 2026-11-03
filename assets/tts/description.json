@@ -1,0 +1,204 @@
+{
+  "_설명": "대사 음성 파일과 대사 텍스트 연결표. audio는 ElevenLabs 버전, audio_edge는 Edge 버전. 경로는 pony-vn 폴더 기준.",
+  "lines": [
+    {
+      "id": "pony_01",
+      "character": "pony",
+      "speaker": "포니",
+      "text": "내일이면 나도 길을 달린다!",
+      "direction": [
+        "excited"
+      ],
+      "audio": "voice/eleven/pony_01.mp3",
+      "audio_edge": "voice/pony_01.mp3",
+      "voice": "Jessica"
+    },
+    {
+      "id": "pony_02",
+      "character": "pony",
+      "speaker": "포니",
+      "text": "기원이면… 원조는 난데?",
+      "direction": [
+        "curious",
+        "mischievously"
+      ],
+      "audio": "voice/eleven/pony_02.mp3",
+      "audio_edge": "voice/pony_02.mp3",
+      "voice": "Jessica"
+    },
+    {
+      "id": "pony_03",
+      "character": "pony",
+      "speaker": "포니",
+      "text": "이봐요, 해 봤어요? 안 되면 될 때까지!",
+      "direction": [
+        "determined"
+      ],
+      "audio": "voice/eleven/pony_03.mp3",
+      "audio_edge": "voice/pony_03.mp3",
+      "voice": "Jessica"
+    },
+    {
+      "id": "genesis_01",
+      "character": "genesis",
+      "speaker": "제네시스",
+      "text": "방금 왁스칠한 범퍼입니다. 수리비는 연봉에서 제하겠습니다.",
+      "direction": [
+        "calm",
+        "dry"
+      ],
+      "audio": "voice/eleven/genesis_01.mp3",
+      "audio_edge": "voice/genesis_01.mp3",
+      "voice": "Eric"
+    },
+    {
+      "id": "genesis_02",
+      "character": "genesis",
+      "speaker": "제네시스",
+      "text": "품질은, 약속입니다.",
+      "direction": [
+        "softly"
+      ],
+      "audio": "voice/eleven/genesis_02.mp3",
+      "audio_edge": "voice/genesis_02.mp3",
+      "voice": "Eric"
+    },
+    {
+      "id": "genesis_03",
+      "character": "genesis",
+      "speaker": "제네시스",
+      "text": "당신이 남으면 나는 사라집니다. 그런데도… 가지 말라고 하고 싶군요.",
+      "direction": [
+        "sad",
+        "whispers"
+      ],
+      "audio": "voice/eleven/genesis_03.mp3",
+      "audio_edge": "voice/genesis_03.mp3",
+      "voice": "Eric"
+    },
+    {
+      "id": "palisade_01",
+      "character": "palisade",
+      "speaker": "팰리세이드",
+      "text": "수동이야? 그럼 밀면 되지! 하나, 둘, 셋!",
+      "direction": [
+        "cheerfully",
+        "shouting"
+      ],
+      "audio": "voice/eleven/palisade_01.mp3",
+      "audio_edge": "voice/palisade_01.mp3",
+      "voice": "Charlie"
+    },
+    {
+      "id": "palisade_02",
+      "character": "palisade",
+      "speaker": "팰리세이드",
+      "text": "다 타! 8인승이야! 오늘은 내가 쏜다!",
+      "direction": [
+        "laughs"
+      ],
+      "audio": "voice/eleven/palisade_02.mp3",
+      "audio_edge": "voice/palisade_02.mp3",
+      "voice": "Charlie"
+    },
+    {
+      "id": "palisade_03",
+      "character": "palisade",
+      "speaker": "팰리세이드",
+      "text": "네가 어디로 가든, 마지막엔 내가 밀어 줄게.",
+      "direction": [
+        "warmly"
+      ],
+      "audio": "voice/eleven/palisade_03.mp3",
+      "audio_edge": "voice/palisade_03.mp3",
+      "voice": "Charlie"
+    },
+    {
+      "id": "avante_01",
+      "character": "avante",
+      "speaker": "아반떼",
+      "text": "너도 오늘 입사야? 다행이다, 나만 긴장한 줄.",
+      "direction": [
+        "relieved"
+      ],
+      "audio": "voice/eleven/avante_01.mp3",
+      "audio_edge": "voice/avante_01.mp3",
+      "voice": "Will"
+    },
+    {
+      "id": "avante_02",
+      "character": "avante",
+      "speaker": "아반떼",
+      "text": "비켜! N 모드 간다! 3분이면 돼!",
+      "direction": [
+        "shouting"
+      ],
+      "audio": "voice/eleven/avante_02.mp3",
+      "audio_edge": "voice/avante_02.mp3",
+      "voice": "Will"
+    },
+    {
+      "id": "avante_03",
+      "character": "avante",
+      "speaker": "아반떼",
+      "text": "포니! 다음에 만나면 내가 선배다?",
+      "direction": [
+        "playfully"
+      ],
+      "audio": "voice/eleven/avante_03.mp3",
+      "audio_edge": "voice/avante_03.mp3",
+      "voice": "Will"
+    },
+    {
+      "id": "ioniq5_01",
+      "character": "ioniq5",
+      "speaker": "아이오닉 5",
+      "text": "신입이죠? 사수 아이오닉 5예요. 충전기, 쓸래요?",
+      "direction": [
+        "matter-of-fact",
+        "hesitant"
+      ],
+      "audio": "voice/eleven/ioniq5_01.mp3",
+      "audio_edge": "voice/ioniq5_01.mp3",
+      "voice": "Liam"
+    },
+    {
+      "id": "ioniq5_02",
+      "character": "ioniq5",
+      "speaker": "아이오닉 5",
+      "text": "딱히 신입을 위해서 도와준 건 아니에요. 정리가 안 된 게 거슬렸을 뿐이에요.",
+      "direction": [
+        "annoyed",
+        "embarrassed"
+      ],
+      "audio": "voice/eleven/ioniq5_02.mp3",
+      "audio_edge": "voice/ioniq5_02.mp3",
+      "voice": "Liam"
+    },
+    {
+      "id": "ioniq5_03",
+      "character": "ioniq5",
+      "speaker": "아이오닉 5",
+      "text": "선배가 돌아가야 제가 태어나요. 그러니까… 꼭 가요.",
+      "direction": [
+        "gently",
+        "sad"
+      ],
+      "audio": "voice/eleven/ioniq5_03.mp3",
+      "audio_edge": "voice/ioniq5_03.mp3",
+      "voice": "Liam"
+    },
+    {
+      "id": "announce_01",
+      "character": "announce",
+      "speaker": "사내 방송",
+      "text": "2026년 신입사원 여러분은 대강당으로 모여 주십시오.",
+      "direction": [
+        "calm"
+      ],
+      "audio": "voice/eleven/announce_01.mp3",
+      "audio_edge": "voice/announce_01.mp3",
+      "voice": "Alice"
+    }
+  ]
+}
